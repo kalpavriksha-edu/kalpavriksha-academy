@@ -1,5 +1,5 @@
 import { Request, Response} from 'express';
-import {AppDataSource} from "../routes/data-source"
+import {AppDataSource} from "../config/data-source"
 import {Course} from "../entity/course" 
 import { User } from '../entity/User';
 import { Tree } from 'typeorm';

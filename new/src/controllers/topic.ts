@@ -1,5 +1,5 @@
 import { Request, Response} from 'express';
-import {AppDataSource} from "../routes/data-source"
+import {AppDataSource} from "../config/data-source"
 import {Topic} from "../entity/topic" 
 
 // getting all posts
