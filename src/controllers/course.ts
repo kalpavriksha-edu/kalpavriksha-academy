@@ -1,87 +1,75 @@
-import { Request, Response} from 'express';
-import {AppDataSource} from "../config/data-source"
-import {Course} from "../entity/course" 
+import { Request, Response } from 'express';
+import Course from "../model/course";
 
-class CourseController{
-    public static async index(req: Request, res: Response){
-        const course = await AppDataSource.manager.find(Course)
-        return res.status(200).json({
-            message: course
-        });  
+class CourseController {
+    public static async index(req: Request, res: Response) {
+        try {
+            const course = await Course.findAll();
+            return res.status(200).json(course);
+        } catch (error: any) {
+            console.error('An error occurred:', error.message); // Log the error message
+            console.error('Stack trace:', error.stack); // Log the stack trace
+            return res.status(500).json({ error: 'Internal server error' });
+        }
     };
 
-    public static async show(req: Request, res: Response){
-        let id:number = +req.params.id;
-        console.log(id)
-        const course = await AppDataSource.manager.findBy(
-            Course, 
-            { course_id : id}
-        )
-        return res.status(200).json({
-            message:   course
-        });
+    public static async show(req: Request, res: Response) {
+        try {
+            const course = await Course.findByPk(req.params.id);
+            return res.status(200).json(course);
+        } catch (error: any) {
+            console.error('An error occurred:', error.message);
+            console.error('Stack trace:', error.stack);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
     };
 
-    public static async update(req: Request, res: Response){
-        let id: number = +req.params.id;
-        let name: string = req.body['name'];
-        let author: string = req.body['author'];
-        let description: string = req.body['description'];
-        // console.log(name,author,description)
-        console.log(id)
-        const course_update = await AppDataSource.manager.findBy(
-            Course, 
-            { course_id : id}
-        )
-        console.log(course_update)
-        const course =new Course()
-        course.course_id= id
-        course.name = name ?? course_update[0].name ;
-        course.author = author?? course_update[0].author;
-        course.description = description?? course_update[0].description; 
-        console.log(course)
-        const responce=await AppDataSource.manager.save(course)
-        return res.status(200).json({
-            message: "Done"
-        });
+    public static async create(req: Request, res: Response) {
+        const { name, description, created_by } = req.body;
+        try {
+            const course = await Course.create({
+                name: String(name),
+                description: String(description),
+                created_by: String(created_by)
+            });
+            return res.status(201).json(course);
+        } catch (error: any) {
+            console.error("An error occurred:", error.message);
+            console.error("Stack trace:", error.stack);
+            return res.status(500).json({ error: "Internal server error" });
+        }
     };
 
-    public static async delete(req: Request, res: Response){
-        // get the post id from req.params
-        let id: number = + req.params.id;
-        const course = await AppDataSource.manager.delete(
-            Course, 
-            { course_id : id}
-        )
-        
-        return res.status(200).json({
-            message: 'post deleted successfully'
-        });
+    public static async delete(req: Request, res: Response) {
+        try {
+            await Course.destroy({
+                where: {
+                    course_id: req.params.id
+                }
+            });
+            return res.status(200).end();
+        } catch (error: any) {
+            console.error('An error occurred:', error.message);
+            console.error('Stack trace:', error.stack);
+            return res.status(500).json({ error: 'Internal server error' });
+
+        }
     };
 
-    public static async create(req: Request, res: Response){
-        
-        // get the data from req.body
-        console.log(req)
-        // const myRequest = new Course( req.body);
-        let name: string = req.body['name'];
-        let author: string = req.body['author'];
-        let description : string = req.body['description'];
-        const course =new Course()
-        course.name=name;
-        course.author=author;
-        course.description=description;
-        console.log(course)
-        // add the post
-
-        AppDataSource.manager.save(course)
-        // return response
-        return res.status(200).json({
-            message: "save !!"
-        });
+    public static async update(req: Request, res: Response) {
+        try {
+            const course = await Course.update(req.body, {
+                where: {
+                    course_id: req.params.id,
+                },
+            });
+            res.status(200).end("successfully updated");
+        } catch (error: any) {
+            console.error('An error occurred:', error.message);
+            console.error('Stack trace:', error.stack);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
     };
-
 }
-
 
 export default CourseController;
