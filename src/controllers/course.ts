@@ -1,73 +1,78 @@
 import { Request, Response } from 'express';
-import Course from "../model/course";
+import  Course from "../model/course";
+import { json } from 'stream/consumers';
 
 class CourseController {
-    public static async index(req: Request, res: Response) {
+    public static async index() {
         try {
-            const course = await Course.findAll();
-            return res.status(200).json(course);
+            const course =await Course.findAll();
+            
+            return course;
         } catch (error: any) {
             console.error('An error occurred:', error.message); // Log the error message
             console.error('Stack trace:', error.stack); // Log the stack trace
-            return res.status(500).json({ error: 'Internal server error' });
+            return { "error": 'Internal server error' };
         }
     };
 
-    public static async show(req: Request, res: Response) {
+    public static async show(id) {
         try {
-            const course = await Course.findByPk(req.params.id);
-            return res.status(200).json(course);
+            
+            const course =await Course.findByPk(id);
+            console.log(course)
+            return course
         } catch (error: any) {
             console.error('An error occurred:', error.message);
             console.error('Stack trace:', error.stack);
-            return res.status(500).json({ error: 'Internal server error' });
+            return {"error": 'Internal server error' };
         }
     };
 
-    public static async create(req: Request, res: Response) {
-        const { name, description, created_by } = req.body;
+   
+    public static async create(body) {
+        const { name, description, created_by } = body;
         try {
-            const course = await Course.create({
+            const course =await Course.create({
                 name: String(name),
                 description: String(description),
                 created_by: String(created_by)
             });
-            return res.status(201).json(course);
+            return {msg:"SUCCESSFULL"}
         } catch (error: any) {
             console.error("An error occurred:", error.message);
             console.error("Stack trace:", error.stack);
-            return res.status(500).json({ error: "Internal server error" });
+            return { error: "Internal server error" };
         }
     };
 
-    public static async delete(req: Request, res: Response) {
+    public static async delete(id) {
         try {
             await Course.destroy({
                 where: {
-                    course_id: req.params.id
+                    course_id: id
                 }
             });
-            return res.status(200).end();
+            return {"msg":"Successfully DELETED"}
         } catch (error: any) {
             console.error('An error occurred:', error.message);
             console.error('Stack trace:', error.stack);
-            return res.status(500).json({ error: 'Internal server error' });
+            return { "error": 'Internal server error' };
 
         }
     };
 
-    public static async update(req: Request, res: Response) {
+    public static async update(params) {
         try {
-            const course = await Course.update(req.body, {
+            const course = await Course.update(params, {
                 where: {
-                    course_id: req.params.id,
+                    course_id: params.id,
                 },
             });
-            res.status(200).end("successfully updated");
+            return {"msg": "Updated Successfully"};
         } catch (error: any) {
             console.error('An error occurred:', error.message);
             console.error('Stack trace:', error.stack);
-            return res.status(500).json({ error: 'Internal server error' });
+            return  {"error": 'Internal server error' };
         }
     };
 }

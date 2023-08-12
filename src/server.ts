@@ -1,4 +1,4 @@
-import  { Express } from 'express';
+import  Express  from 'express';
 const express = require('express');
 const bodyParser = require('body-parser');
 import router = require("./config/course");
@@ -7,7 +7,7 @@ const PORT = 3000;
 
 const app = express();
 
-import { sequelize } from './db/dbConnection';
+const { sequelize } = require('./db/dbConnection');
 
 (async () => {
   try {
@@ -20,8 +20,12 @@ import { sequelize } from './db/dbConnection';
     console.error('Error synchronizing the database:', error);
   }
 })();
-
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', router);
+app.router("/*",(req,res)=>{
+  res.send({"msg":"URL NOT DEFINE"})
+  res.end()
+})
 
+module.exports= app

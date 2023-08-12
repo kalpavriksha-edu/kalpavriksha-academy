@@ -1,5 +1,5 @@
-import {Sequelize} from 'Sequelize';
-import {db_config} from "../config/db_config"
+import {Sequelize} from 'sequelize';
+import  db_config from "../config/db_config";
 
 
 export const sequelize = new Sequelize(db_config.DATABASE, db_config.USER, db_config.PASSWORD, {
