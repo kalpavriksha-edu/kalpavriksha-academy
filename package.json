@@ -36,7 +36,6 @@
       "sequelize-typescript": "^2.1.5",
       "winston": "^3.10.0"
    },
-
    "scripts": {
       "test": "jest",
       "start": "ts-node ./src/server.ts",
