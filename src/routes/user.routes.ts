@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import pool from '../config/db.connection';
 import generateToken from '../config/token.generate';
 import bcrypt from 'bcrypt';
+import { MysqlError, PoolConnection } from 'mysql';
 
 const saltround = 10;
 
@@ -13,17 +14,15 @@ class UsersRouter {
         this.routes();
     }
 
-    private routes(): void {
-        this.router.get('/', this.okResponse);
+    routes(): void {
         this.router.post('/login', this.login);
         this.router.get('/details/:id', this.getUserDetails);
         this.router.post('/register', this.registerUser);
     }
 
-    private login(req: Request, res: Response): void {
+    login = async (req: Request, res: Response) => {
         const { email, password } = req.body;
-
-        pool.getConnection((err: any, conn: any) => {
+        pool.getConnection((err: MysqlError, conn: PoolConnection) => {
             if (err) {
                 console.log('Entered into error');
                 console.log(err);
@@ -36,7 +35,7 @@ class UsersRouter {
             }
 
             console.log(req.body);
-            pool.query(`SELECT password FROM User WHERE email=?`, [email], (err: any, rows: any) => {
+            conn.query(`SELECT password FROM User WHERE email=?`, [email], async (err: any, rows: any) => {
                 if (err) {
                     conn.release();
                     return res.send({
@@ -47,35 +46,28 @@ class UsersRouter {
                 }
                 console.log(rows[0].password);
                 const hash = rows[0].password;
-                bcrypt.compare(password, hash, (err: any, result: boolean) => {
-                    if (err) {
-                        res.send({
-                            message: 'Failed',
-                            statusCode: 500,
-                            data: err,
-                        });
-                    }
-                    if (result) {
-                        res.send({
-                            message: 'Success',
-                            statusCode: 200,
-                            data: { token: generateToken(email) },
-                        });
-                    } else {
-                        res.send({
-                            message: 'Failed',
-                            statusCode: 500,
-                            data: err,
-                        });
-                    }
-                });
+                const result = await bcrypt.compare(password, hash);
+
+                if (result) {
+                    res.send({
+                        message: 'Success',
+                        statusCode: 200,
+                        data: { token: generateToken(email) },
+                    });
+                } else {
+                    res.send({
+                        message: 'Failed',
+                        statusCode: 500,
+                        data: err,
+                    });
+                }
                 conn.release();
             });
         });
-    }
+    };
 
-    private getUserDetails(req: Request, res: Response): void {
-        pool.getConnection((err: any, conn: any) => {
+    getUserDetails = async (req: Request, res: Response) => {
+        pool.getConnection((err: MysqlError, conn: PoolConnection) => {
             if (err) {
                 console.error('Error during connection:', err);
                 return res.status(500).json({
@@ -112,10 +104,10 @@ class UsersRouter {
                 });
             });
         });
-    }
+    };
 
-    private registerUser(req: Request, res: Response): void {
-        pool.getConnection((err: any, conn: any) => {
+    registerUser = async (req: Request, res: Response) => {
+        pool.getConnection((err: MysqlError, conn: PoolConnection) => {
             if (err) {
                 console.error('Error during connection:', err);
                 return res.status(500).json({
@@ -133,7 +125,7 @@ class UsersRouter {
                     message: 'Connection is null',
                 });
             }
-            bcrypt.hash(req.body.password, saltround, (error: any, hash: string) => {
+            bcrypt.hash(req.body.password, saltround, async (error: any, hash: string) => {
                 if (error) {
                     res.send({
                         success: false,
@@ -166,7 +158,7 @@ class UsersRouter {
                 }
             });
         });
-    }
+    };
 }
 
 const usersRouter = new UsersRouter().router;
