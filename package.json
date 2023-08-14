@@ -1,7 +1,7 @@
 {
-   "name": "new",
+   "name": "kalpavriksha-academy",
    "version": "0.0.1",
-   "description": "Awesome project developed with TypeORM.",
+   "description": "Kalpavriksha backend server",
    "type": "commonjs",
    "moduleDirectories": [
       "node_modules",
@@ -22,13 +22,10 @@
       "mysql2": "^3.6.0",
       "sequelize": "^6.32.1"
    },
-
    "scripts": {
       "test": "jest",
-      "start": "tsc --watch ",
-      "dev": "nodemon ./dest/server.js"
-     
-     
+      "start": "ts-node src/server.ts",
+      "dev": "nodemon --exec ts-node-esm ./src/server.ts"
    },
    "jest": {
       "testEnvironment": "node",
