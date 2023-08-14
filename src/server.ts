@@ -1,13 +1,11 @@
-import  { Express } from 'express';
 const express = require('express');
 const bodyParser = require('body-parser');
-import router = require("./config/course");
+import router = require("./routes/course.routes");
 
 const PORT = 3000;
-
 const app = express();
 
-import { sequelize } from './db/dbConnection';
+const { sequelize } = require('./db/dbConnection');
 
 (async () => {
   try {
@@ -24,4 +22,7 @@ import { sequelize } from './db/dbConnection';
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', router);
-
+app.use("/*", (req, res) => {
+  res.send({ "msg": "URL NOT DEFINE" })
+  res.end()
+});

@@ -1,7 +1,5 @@
-import { DataTypes, Model } from "Sequelize";
-import { sequelize } from '../db/dbConnection';
-import { timeStamp } from "console";
-
+import { DataTypes, Model } from "sequelize";
+const { sequelize } = require('../db/dbConnection');
 
 class Course extends Model {};
 
@@ -18,7 +16,6 @@ Course.init({
     },
     description: {
         type: DataTypes.STRING,
-        
     },
     created_by: {
         type: DataTypes.STRING,

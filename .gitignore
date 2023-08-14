@@ -7,3 +7,4 @@ temp/
 .env
 dest/
 package-lock.json
+coverage/
