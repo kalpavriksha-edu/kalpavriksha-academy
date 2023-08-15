@@ -1,5 +1,6 @@
 import express from 'express';
-import { APP_PORT } from './config/config';
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
 
 class ExpressApp {
   private app: express.Application;
@@ -15,8 +16,8 @@ class ExpressApp {
   }
 
   startServer() {
-    this.app.listen(APP_PORT, () => {
-      console.log(`Server is listening on port: ${APP_PORT}`);
+    this.app.listen(process.env.APP_PORT, () => {
+      console.log(`Server is listening on port: ${process.env.APP_PORT}`);
     });
   }
 }

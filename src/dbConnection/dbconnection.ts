@@ -1,13 +1,20 @@
 
 import { Sequelize } from 'sequelize';
-import { DB_HOST, DB_USER, DB_PASS, MYSQL_DB } from '../config/config';
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
+
 
 class DatabaseConnection {
   private sequelize: Sequelize;
 
   constructor() {
-    this.sequelize = new Sequelize(MYSQL_DB, DB_USER, DB_PASS, {
-      host: DB_HOST,
+    console.log('process.env.MYSQL_DB', process.env.MYSQL_DB)
+    console.log('process.env.localhost', process.env.DB_USER)
+    console.log('process.env.DB_HOST', process.env.DB_HOST)
+    console.log('process.env.DB_PORT', process.env.DB_PORT)
+    console.log('process.env.APP_PORT', process.env.APP_PORT)
+    this.sequelize = new Sequelize(process.env.MYSQL_DB, process.env.DB_USER, process.env.DB_PASS, {
+      host: process.env.DB_HOST,
       dialect: 'mysql',
       logging: true,
     });

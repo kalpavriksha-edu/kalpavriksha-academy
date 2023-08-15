@@ -1,16 +1,19 @@
 import dbConnection from './dbConnection/dbconnection'; 
 import ExpressApp from './app';
 import CoustomRoutes from './Router/CoustomRoutes';
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
 
 const expressApp = new ExpressApp();
 
 
 class Server {
  static async start() {
-  await dbConnection.connect(); // 
-  await dbConnection.syncDatabase(); // 
+  await dbConnection.connect(); 
+  await dbConnection.syncDatabase(); 
+  
 
-  const sequelize = dbConnection.getSequelizeInstance(); // 
+  const sequelize = dbConnection.getSequelizeInstance(); 
   sequelize.authenticate().then(() => {
     console.log('Database authenticated successfully.');
   }).catch(error => {
@@ -20,8 +23,8 @@ class Server {
   const app = expressApp.getApp();
   app.use("/", CoustomRoutes.publicRoutes());
   app.use("/", CoustomRoutes.protectedRoutes());
-
   expressApp.startServer();
+  
  }
 }
 
