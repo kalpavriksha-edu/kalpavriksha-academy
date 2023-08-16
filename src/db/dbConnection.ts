@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize';
-import db_config from "../config/db_config";
+import dbConfig from "../config/dbConfig";
 
-export const sequelize = new Sequelize(db_config.DATABASE, db_config.USER, db_config.PASSWORD, {
-  host: db_config.HOST,
+export const sequelize = new Sequelize(dbConfig.DATABASE, dbConfig.USER, dbConfig.PASSWORD, {
+  host: dbConfig.HOST,
   dialect: 'mysql',
   logging: false
 });
