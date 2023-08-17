@@ -13,12 +13,16 @@ This is repository for kalpavriksha backend server.
  ### Dependencies
  - Express (Used for create server)
  - Sequelize (Used for ORM)
+ - Winston (Used as logging library)
 
 ## Getting started
 
  **Install MySQL**
 
+  Download and install from [https://dev.mysql.com/downloads/](https://dev.mysql.com/downloads/)
+
   **Create a Database:**
+
   Connect to the MySQL Server using your preferred MySQL client (e.g., MySQL Workbench) and create a new database.
 ```sql
   CREATE DATABASE kalpavriksha;
