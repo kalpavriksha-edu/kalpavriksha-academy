@@ -23,4 +23,3 @@ class ExpressApp {
 }
 
 export default ExpressApp;
-
