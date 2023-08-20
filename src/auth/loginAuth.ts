@@ -42,3 +42,4 @@ class LoginAuth{
 }
 
 export default LoginAuth;
+

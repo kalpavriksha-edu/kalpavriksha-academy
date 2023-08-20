@@ -40,5 +40,5 @@ LoginModel.init(
     }
   );
   
-  export default LoginModel;
-  
+export default LoginModel;
+

@@ -7,3 +7,4 @@ router.post('/register',loginAuth,loginControllerInstance.register);
 router.post('/login', loginControllerInstance.login);
 
 export default router;
+
