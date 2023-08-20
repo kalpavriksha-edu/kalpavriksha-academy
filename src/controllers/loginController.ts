@@ -68,5 +68,4 @@ class loginController {
   }
 }
 
-const loginControllerInstance = new loginController();
-export default loginControllerInstance;
+const export loginControllerInstance = new loginController();

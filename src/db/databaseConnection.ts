@@ -41,6 +41,3 @@ class DatabaseConnection {
 const dbConnection = new DatabaseConnection(); 
 
 export default dbConnection;
-
-
-
