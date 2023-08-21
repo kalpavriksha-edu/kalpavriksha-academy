@@ -2,17 +2,19 @@ import { Request, Response } from 'express';
 import Course from "../model/courseModel";
 import CourseService from '../service/courseService';
 import { responseGenerator } from '../utility/responseGenerator';
-import logger from '../utility/logger';
+const successEnums = require('../constants/successConstant');
+import loggerManager from '../utility/logger';
 
+const logger = loggerManager.getLogger();
 const courseService = new CourseService();
 
 class CourseController {
     public async getCourses(req: Request, res: Response) {
         try {
             const courses = await courseService.getCourses();
-            return responseGenerator.getSuccessResponse(res, 'Courses Fetched Successfully', courses);
+            return responseGenerator.getSuccessResponse(res,successEnums.COURSE_FETCHED, courses);
         } catch (error) {
-            logger.error('An error occurred:', error);
+            logger.error(error);
             return responseGenerator.getErrorResponse(res, 500);
         }
     };
@@ -21,9 +23,9 @@ class CourseController {
         const id: number = req.params.id;
         try {
             const course = await courseService.getCourseById(id);
-            return responseGenerator.getSuccessResponse(res, 'Course Fetched Successfully', course);
+            return responseGenerator.getSuccessResponse(res, successEnums.COURSE_FETCHED, course);
         } catch (error) {
-            logger.error('An error occurred:', error);
+            logger.error(error);
             return responseGenerator.getErrorResponse(res, 404);
         }
     };
@@ -32,9 +34,9 @@ class CourseController {
         const { name, description, created_by } = req.body;
         try {
             const course = await courseService.createCourse(name, description, created_by);
-            return responseGenerator.getSuccessResponse(res, 'Course Successfully Created', course);
+            return responseGenerator.getSuccessResponse(res, successEnums.COURSE_CREATED, course);
         } catch (error: any) {
-            logger.error('An error occurred:', error);
+            logger.error(error);
             return responseGenerator.getErrorResponse(res, 500);
         }
     };
@@ -43,9 +45,9 @@ class CourseController {
         const id: number = req.params.id;
         try {
             await courseService.deleteCourse(id);
-            return responseGenerator.getSuccessResponse(res, 'Course Successfully Deleted');
+            return responseGenerator.getSuccessResponse(res, successEnums.DELETE_SUCCESS);
         } catch (error) {
-            logger.error('An error occurred:', error);
+            logger.error(error);
             return responseGenerator.getErrorResponse(res, 404);
         }
     };
@@ -54,9 +56,9 @@ class CourseController {
         const id: number = req.params.id;
         try {
             await courseService.updateCourse(id, req.body);
-            return responseGenerator.getSuccessResponse(res, 'Course Updated Successfully');
+            return responseGenerator.getSuccessResponse(res, successEnums.UPDATE_SUCCESS);
         } catch (error) {
-            logger.error('An error occurred:', error);
+            logger.error(error);
             return responseGenerator.getErrorResponse(res, 404);
         }
     };

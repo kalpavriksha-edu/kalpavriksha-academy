@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
-const { sequelize } = require('../db/dbConnection');
+import { database } from '../db/dbConnection';
 
-class Course extends Model {};
+class Course extends Model { };
 
 Course.init({
     course_id: {
@@ -22,7 +22,7 @@ Course.init({
         allowNull: false
     }
 }, {
-    sequelize,
+    sequelize: database.getSequelizeInstance(),
     modelName: 'Course',
     timestamps: true
 });

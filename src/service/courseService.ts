@@ -1,23 +1,24 @@
 import Course from "../model/courseModel";
-import logger from '../utility/logger';
+const errorEnums = require('../constants/errorConstants');
+const successEnums = require('../constants/successConstant');
+import loggerManager from '../utility/logger';
 
+const logger = loggerManager.getLogger();
 class CourseService {
-
     public async getCourses() {
         try {
             const courses = await Course.findAll();
             return courses;
         } catch (error) {
-            logger.error('An error occurred:', error.message);
-            logger.error('Stack trace:', error.stack);
-            throw new Error('Internal server error');
+            logger.error(error.message);
+            throw new Error(errorEnums.INT_SERVER_ERR);
         }
     };
 
     public async getCourseById(id: number) {
         const course = await Course.findByPk(id);
         if (!course) {
-            throw new Error(`Resourse Not Found`);
+            throw new Error(errorEnums.ERR_INVALID_INPUT);
         }
         return course;
     };
@@ -31,23 +32,25 @@ class CourseService {
             });
             return course;
         } catch (error) {
-            throw new Error('Internal server error');
+            throw new Error(errorEnums.INT_SERVER_ERR);
         }
     };
 
     public async deleteCourse(id: number) {
-        const affectedRows = await Course.destroy({
-            where: {
-                course_id: id
+        try {
+            const affectedRows = await Course.destroy({
+                where: {
+                    course_id: id
+                }
+            });
+            if (affectedRows === 0) {
+                throw new Error();
             }
-        });
-        if (affectedRows === 0) {
-            throw new Error('Resource Not Found');
+            return successEnums.DELETE_SUCCESS;
+        } catch (error) {
+            logger.error(error);
+            throw new Error(errorEnums.INT_SERVER_ERR);
         }
-        return "Successfully Deleted";
-    } catch(error: Error) {
-        logger.error('An error occurred:', error);
-        throw new Error('Internal server error');
     };
 
     public async updateCourse(id: number, updates: Object) {
@@ -58,13 +61,13 @@ class CourseService {
                 },
             });
             if (affectedRows === 0) {
-                throw new Error(`Resources Not Found`);
+                throw new Error(errorEnums.ERR_INVALID_INPUT);
             }
-            return "Successfully Updated";
+            return successEnums.UPDATE_SUCCESS;
         } catch (error) {
-            logger.error('An error occurred:', error);
-            throw new Error('Internal server error');
-        };
+            logger.error(error);
+            throw new Error(errorEnums.INT_SERVER_ERR);
+        }
     };
 }
 
