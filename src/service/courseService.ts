@@ -13,7 +13,7 @@ class CourseService {
             logger.error(error.message);
             logger.error(errorEnums.INT_SERVER_ERR);
         }
-    };
+    }
 
     public async getCourseById(id: number) {
         const course = await Course.findByPk(id);
@@ -21,7 +21,7 @@ class CourseService {
             logger.error(errorEnums.ERR_INVALID_INPUT);
         }
         return course;
-    };
+    }
 
     public async createCourse(name: string, description: string, created_by: string) {
         try {
@@ -34,7 +34,7 @@ class CourseService {
         } catch (error) {
             logger.error(errorEnums.INT_SERVER_ERR);
         }
-    };
+    }
 
     public async deleteCourse(id: number) {
         try {
@@ -51,7 +51,7 @@ class CourseService {
             logger.error(error);
             logger.error(errorEnums.INT_SERVER_ERR);
         }
-    };
+    }
 
     public async updateCourse(id: number, updates: Object) {
         try {
@@ -68,7 +68,8 @@ class CourseService {
             logger.error(error);
             logger.error(errorEnums.INT_SERVER_ERR);
         }
-    };
+    }
 }
 
 export default CourseService;
+
