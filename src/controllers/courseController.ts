@@ -64,5 +64,5 @@ class CourseController {
     }
 }
 
-export const courseController = new CourseController();
-
+const courseController = new CourseController();
+export default courseController;
