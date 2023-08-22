@@ -39,6 +39,8 @@ class Database {
   getSequelizeInstance() {
     return this.sequelize;
   }
+
 }
 
 export default Database;
+
