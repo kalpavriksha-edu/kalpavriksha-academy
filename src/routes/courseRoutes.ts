@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { courseController } from "../controllers/courseController"
+import courseController from "../controllers/courseController"
 
 const router = Router();
 
@@ -10,4 +10,3 @@ router.patch('/course/:id', courseController.updateCourse);
 router.delete('/course/:id', courseController.deleteCourse);
 
 export default router;
-
