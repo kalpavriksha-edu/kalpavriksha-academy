@@ -8,15 +8,10 @@ class DatabaseConnection {
   private sequelize: Sequelize;
 
   constructor() {
-    console.log('process.env.MYSQL_DB', process.env.MYSQL_DB)
-    console.log('process.env.localhost', process.env.DB_USER)
-    console.log('process.env.DB_HOST', process.env.DB_HOST)
-    console.log('process.env.DB_PORT', process.env.DB_PORT)
-    console.log('process.env.APP_PORT', process.env.APP_PORT)
     this.sequelize = new Sequelize(process.env.MYSQL_DB, process.env.DB_USER, process.env.DB_PASS, {
       host: process.env.DB_HOST,
       dialect: 'mysql',
-      logging: true,
+      logging: false,
     });
   }
   /***
@@ -54,57 +49,3 @@ const dbConnection = new DatabaseConnection();
 export default dbConnection;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const sequelize = new Sequelize(MYSQL_DB, DB_USER, DB_PASS, {
-//     host: DB_HOST,
-//     dialect: 'mysql'
-//   });
-
-
-
-//   try { 
-//       sequelize.authenticate();
-//     console.log('Connection has been established successfully.');
-//   } catch (error) {
-//     console.error('Unable to connect to the database:', error);
-//   }
-
-// const { Sequelize, Op, Model, DataTypes } = require("sequelize");
-// const sequelize = new Sequelize("mysql");
-
-
-// const pool = mysql.createPool({
-//   port: DB_PORT,
-//   host: DB_HOST,
-//   user: DB_USER,
-//   password: DB_PASS,
-//   database: MYSQL_DB,
-// });
-
-// pool.getConnection((err: any, connection: PoolConnection) => {
-//   if (err) {
-//     console.error("Error connecting to the database:", err);
-//   } else {
-//     console.log("Connected to the database!");
-//     connection.release(); // Release the connection back to the pool
-//   }
-// });
-
-// const promisePool = pool.promise();
-// // console.log(promisePool);
-
-// export = sequelize;

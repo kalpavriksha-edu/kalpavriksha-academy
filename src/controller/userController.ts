@@ -3,6 +3,7 @@ import { genSaltSync, hashSync, compareSync } from "bcryptjs";
 import UserModel from "../models/users";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { log } from "console";
 
 interface UserInterface {
   id?: number;
@@ -13,8 +14,8 @@ interface UserInterface {
 }
 export class UserController {
   async getAllUsers(req: Request, res: Response){
-    try {
-      const allUsers: UserInterface[] = await UserModel.findAll({ raw: true });
+      try {
+      const allUsers: UserInterface[] = await UserModel.findAll({ raw: true });  
       return res.status(200).json({ message: "success", data: allUsers });
     } catch (err) {
       console.error("Error fetching all users:", err);
@@ -40,7 +41,7 @@ export class UserController {
         .json({ message: "User Added Successfully!!", data: newUser });
     } catch (err) {
       console.error("Sequelize validation error:", err.message);
-      return res.status(500).json(err);
+      return res.status(400).json(err);
     }
   }
 

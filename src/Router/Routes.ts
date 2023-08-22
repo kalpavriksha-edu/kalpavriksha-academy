@@ -1,17 +1,10 @@
 import { Router } from "express";
 import authorization from "../auth/token_validatiion";
-import {UserController} from "../controller/userController";
+import { UserController } from "../controller/userController";
 
 const userController = new UserController();
-export default class CoustomRoutes {
+export default class Routes {
   private router: Router = Router();
-
- static publicRoutes(): Router {
-    const publicRouter = Router();
-    publicRouter.post("/user/login",userController.userLogin);
-    publicRouter.post("/user", userController.createNewUser);
-    return publicRouter;
-  }
 
   static protectedRoutes(): Router {
     const protectedRouter = Router();
@@ -21,5 +14,14 @@ export default class CoustomRoutes {
     protectedRouter.delete("/user/:id", userController.deleteUserById);
     return protectedRouter;
   }
-}
 
+  static publicRoutes(): Router {
+    const publicRouter = Router();
+
+    publicRouter.post("/user", userController.createNewUser);
+
+    publicRouter.post("/user/login", userController.userLogin);
+
+    return publicRouter;
+  }
+}
