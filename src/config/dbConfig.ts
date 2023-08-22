@@ -18,4 +18,3 @@ SMTP_PASSWORD: process.env.SMTP_PASSWORD
 export const port = {
     PORT: process.env.PORT
 };
-

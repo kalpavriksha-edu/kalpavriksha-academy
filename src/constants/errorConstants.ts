@@ -38,4 +38,3 @@ const errorConstant = {
 };
 
 export default errorConstant;
-
