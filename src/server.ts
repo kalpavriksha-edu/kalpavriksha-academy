@@ -11,8 +11,8 @@ import { Logger } from "winston";
 class Server {
   private PORT: string;
   private app: Express;
-  logger: Logger;
-  database: Database;
+  private logger: Logger;
+  private database: Database;
   constructor() {
     this.PORT = port.PORT;
     this.logger = loggerManager.getLogger();
@@ -30,7 +30,6 @@ class Server {
     } catch (error) {
       this.logger.error(error);
     }
-
     this.setupMiddleware();
     this.setupRoutes();
     this.setup404Handler();
