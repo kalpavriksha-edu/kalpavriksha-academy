@@ -17,7 +17,7 @@ class CourseController {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 500);
         }
-    };
+    }
 
     public async getCourseById(req: Request, res: Response) {
         const id: number = req.params.id;
@@ -28,7 +28,7 @@ class CourseController {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 404);
         }
-    };
+    }
 
     public async createCourse(req: Request, res: Response) {
         const { name, description, created_by } = req.body;
@@ -39,7 +39,7 @@ class CourseController {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 500);
         }
-    };
+    }
 
     public async deleteCourse(req: Request, res: Response) {
         const id: number = req.params.id;
@@ -50,7 +50,7 @@ class CourseController {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 404);
         }
-    };
+    }
 
     public async updateCourse(req: Request, res: Response) {
         const id: number = req.params.id;
@@ -61,7 +61,8 @@ class CourseController {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 404);
         }
-    };
+    }
 }
 
 export const courseController = new CourseController();
+
