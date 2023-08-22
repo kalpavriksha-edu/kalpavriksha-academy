@@ -10,3 +10,4 @@ router.patch('/course/:id', courseController.updateCourse);
 router.delete('/course/:id', courseController.deleteCourse);
 
 export default router;
+
