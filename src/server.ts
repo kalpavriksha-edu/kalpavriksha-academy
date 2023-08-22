@@ -13,6 +13,7 @@ class Server {
   private readonly app: Express;
   private readonly logger: Logger;
   private readonly database: Database;
+
   constructor() {
     this.PORT = port.PORT;
     this.logger = loggerManager.getLogger();
@@ -53,3 +54,4 @@ class Server {
 
 const server = new Server();
 server.start();
+
