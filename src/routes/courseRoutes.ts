@@ -9,4 +9,4 @@ router.post('/course', courseController.createCourse);
 router.patch('/course/:id', courseController.updateCourse);
 router.delete('/course/:id', courseController.deleteCourse);
 
-module.exports = router;
+export default router;
