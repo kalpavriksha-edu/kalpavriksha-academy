@@ -41,3 +41,4 @@ class LoggerManager {
 }
 
 export default LoggerManager.getInstance();
+
