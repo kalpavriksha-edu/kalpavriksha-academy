@@ -12,4 +12,3 @@ export const dbConfig = {
 export const port = {
     PORT: process.env.PORT
 };
-
