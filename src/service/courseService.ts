@@ -1,7 +1,7 @@
-import Course from "../model/courseModel";
-const errorEnums = require('../constants/errorConstants');
-const successEnums = require('../constants/successConstant');
-import loggerManager from '../utility/logger';
+import Course from "../model/courseModel"
+import loggerManager from "../utility/logger"
+import errorEnums from "../constants/errorConstants"
+import successEnums from "../constants/successConstant"
 
 const logger = loggerManager.getLogger();
 class CourseService {
@@ -11,14 +11,14 @@ class CourseService {
             return courses;
         } catch (error) {
             logger.error(error.message);
-            throw new Error(errorEnums.INT_SERVER_ERR);
+            logger.error(errorEnums.INT_SERVER_ERR);
         }
     };
 
     public async getCourseById(id: number) {
         const course = await Course.findByPk(id);
         if (!course) {
-            throw new Error(errorEnums.ERR_INVALID_INPUT);
+            logger.error(errorEnums.ERR_INVALID_INPUT);
         }
         return course;
     };
@@ -32,7 +32,7 @@ class CourseService {
             });
             return course;
         } catch (error) {
-            throw new Error(errorEnums.INT_SERVER_ERR);
+            logger.error(errorEnums.INT_SERVER_ERR);
         }
     };
 
@@ -49,7 +49,7 @@ class CourseService {
             return successEnums.DELETE_SUCCESS;
         } catch (error) {
             logger.error(error);
-            throw new Error(errorEnums.INT_SERVER_ERR);
+            logger.error(errorEnums.INT_SERVER_ERR);
         }
     };
 
@@ -57,16 +57,16 @@ class CourseService {
         try {
             const [affectedRows] = await Course.update(updates, {
                 where: {
-                    course_id: id,
-                },
-            });
+                    course_id: id
+                }
+            })
             if (affectedRows === 0) {
-                throw new Error(errorEnums.ERR_INVALID_INPUT);
+                logger.error(errorEnums.ERR_INVALID_INPUT);
             }
             return successEnums.UPDATE_SUCCESS;
         } catch (error) {
             logger.error(error);
-            throw new Error(errorEnums.INT_SERVER_ERR);
+            logger.error(errorEnums.INT_SERVER_ERR);
         }
     };
 }

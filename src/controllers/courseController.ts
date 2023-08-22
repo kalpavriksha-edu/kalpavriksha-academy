@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import Course from "../model/courseModel";
-import CourseService from '../service/courseService';
-import { responseGenerator } from '../utility/responseGenerator';
-const successEnums = require('../constants/successConstant');
-import loggerManager from '../utility/logger';
+import { type Request, type Response } from "express"
+import { responseGenerator } from "../utility/responseGenerator"
+import Course from "../model/courseModel"
+import CourseService from "../service/courseService"
+import loggerManager from "../utility/logger"
+import successEnums from "../constants/successConstant"
 
 const logger = loggerManager.getLogger();
 const courseService = new CourseService();
@@ -12,7 +12,7 @@ class CourseController {
     public async getCourses(req: Request, res: Response) {
         try {
             const courses = await courseService.getCourses();
-            return responseGenerator.getSuccessResponse(res,successEnums.COURSE_FETCHED, courses);
+            return responseGenerator.getSuccessResponse(res, successEnums.COURSE_FETCHED, courses);
         } catch (error) {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 500);

@@ -1,11 +1,9 @@
-import { Response } from 'express';
+import { type Response } from "express"
 
-interface Messages {
-    [errorCode: number]: string;
-}
+type Messages = Record<number, string>
 
 class ResponseGenerator {
-    private messages: Messages = {
+    private readonly messages: Messages = {
         200: "OK",
         400: "Bad Request: The request was malformed.",
         404: "Resource not found",
@@ -15,11 +13,11 @@ class ResponseGenerator {
         const response = {
             error_code: errorCode,
             error_message: this.messages[errorCode]
-        };
+        }
         return res.json(response);
     };
 
-    public getSuccessResponse(res: Response, message: string, data?: any) {
+    public getSuccessResponse(res: Response, message: { message: string }, data?: any) {
         const response = { message, data };
         return res.status(200).json(response);
     };

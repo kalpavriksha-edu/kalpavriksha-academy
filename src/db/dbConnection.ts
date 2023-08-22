@@ -1,12 +1,12 @@
-import { Sequelize } from 'sequelize';
-import { dbConfig } from "../config/dbConfig";
-const errorEnums = require('../constants/errorConstants');
-const successEnums = require('../constants/successConstant');
-import loggerManager from '../utility/logger';
+import { Sequelize } from "sequelize"
+import { dbConfig } from "../config/dbConfig"
+import loggerManager from "../utility/logger"
+import errorEnums from "../constants/errorConstants"
+import successEnums from "../constants/successConstant"
 
 const logger = loggerManager.getLogger();
 class Database {
-  private sequelize: Sequelize;
+  private readonly sequelize: Sequelize;
 
   constructor() {
     this.sequelize = new Sequelize(dbConfig.DATABASE, dbConfig.USER, dbConfig.PASSWORD, {
@@ -35,9 +35,10 @@ class Database {
       logger.error(error);
     }
   }
+
   getSequelizeInstance() {
     return this.sequelize;
   }
 }
 
-export default  Database;
+export default Database;

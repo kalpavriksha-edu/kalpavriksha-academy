@@ -1,4 +1,4 @@
-const { createLogger, format, transports } = require('winston');
+import { createLogger, format, transports } from "winston"
 
 class LoggerManager {
     logger: any;
@@ -6,11 +6,12 @@ class LoggerManager {
     constructor() {
         this.configureLogger();
     }
+
     configureLogger() {
         this.logger = createLogger({
-            evels: {
+            levels: {
                 error: 0,
-                info: 1,
+                info: 1
             },
             level: 'info',
 
@@ -23,15 +24,17 @@ class LoggerManager {
             ),
             transports: [
                 new transports.Console()
-            ],
+            ]
         });
     }
+
     static getInstance() {
         if (!LoggerManager.instance) {
             LoggerManager.instance = new LoggerManager();
         }
         return LoggerManager.instance;
     }
+
     getLogger() {
         return this.logger;
     }
