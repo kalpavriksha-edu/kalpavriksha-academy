@@ -39,4 +39,4 @@ class Database {
     return this.sequelize;
   }
 }
-export const database = new Database();
+export default  Database;
