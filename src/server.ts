@@ -1,18 +1,18 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-import router = require("./routes/courseRoutes");
-import { Request, Response, Express } from 'express';
-import loggerManager from "./utility/logger";
-const errorEnums = require('./constants/errorConstants');
-import { port } from "./config/dbConfig";
-import Database from './db/dbConnection';
-import { Logger } from "winston";
+import { type Request, type Response, type Express } from "express"
+import { type Logger } from "winston"
+import { port } from "./config/dbConfig"
+import express from "express"
+import bodyParser from "body-parser"
+import loggerManager from "./utility/logger"
+import router from "./routes/courseRoutes"
+import Database from "./db/dbConnection"
+import errorEnums from "./constants/errorConstants"
 
 class Server {
-  private PORT: string;
-  private app: Express;
-  private logger: Logger;
-  private database: Database;
+  private readonly PORT: string;
+  private readonly app: Express;
+  private readonly logger: Logger;
+  private readonly database: Database;
   constructor() {
     this.PORT = port.PORT;
     this.logger = loggerManager.getLogger();
@@ -24,18 +24,18 @@ class Server {
     try {
       this.app.listen(this.PORT, () => {
         console.log("Server is running at port..." + this.PORT);
-      });
+      })
       await this.database.connect();
       await this.database.syncDatabase();
     } catch (error) {
       this.logger.error(error);
     }
-    this.setupMiddleware();
+    this.configureMiddleware();
     this.setupRoutes();
-    this.setup404Handler();
+    this.handleInvalidUrlRequests();
   }
 
-  setupMiddleware() {
+  configureMiddleware() {
     this.app.use(express.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
   }
@@ -44,10 +44,10 @@ class Server {
     this.app.use('/', router);
   }
 
-  setup404Handler() {
+  handleInvalidUrlRequests() {
     this.app.use((req: Request, res: Response) => {
       res.status(404).json({ error: errorEnums.ERR_URL });
-    });
+    })
   }
 }
 
