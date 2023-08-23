@@ -43,6 +43,8 @@ class Server {
 
   setupRoutes() {
     this.app.use('/', router);
+    this.app.use('/',routes.protectedRoutes);
+    this.app.use('/',routes.publicRoutes);
   }
 
   handleInvalidUrlRequests() {
