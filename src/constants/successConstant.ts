@@ -16,6 +16,15 @@ const successConstant = {
     },
     COURSE_CREATED: {
         message: "Course Successfully Created"
+    },
+    USER_FETCHED: {
+        message: "Fetched Successfully"
+    },
+    USER_CREATED: {
+        message: "User Successfully Created"
+    },
+    LOGIN_SUCCSESS:{
+        message: "Logged in Succsessfully"
     }
 };
 

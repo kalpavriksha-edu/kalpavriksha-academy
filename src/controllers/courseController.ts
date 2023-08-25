@@ -20,7 +20,7 @@ class CourseController {
     }
 
     public async getCourseById(req: Request, res: Response) {
-        const id: number = req.params.id;
+        const id: number = Number(req.params.id);
         try {
             const course = await courseService.getCourseById(id);
             return responseGenerator.getSuccessResponse(res, successEnums.COURSE_FETCHED, course);
@@ -42,7 +42,7 @@ class CourseController {
     }
 
     public async deleteCourse(req: Request, res: Response) {
-        const id: number = req.params.id;
+        const id: number = Number(req.params.id);
         try {
             await courseService.deleteCourse(id);
             return responseGenerator.getSuccessResponse(res, successEnums.DELETE_SUCCESS);
@@ -53,7 +53,7 @@ class CourseController {
     }
 
     public async updateCourse(req: Request, res: Response) {
-        const id: number = req.params.id;
+        const id: number = Number(req.params.id);
         try {
             await courseService.updateCourse(id, req.body);
             return responseGenerator.getSuccessResponse(res, successEnums.UPDATE_SUCCESS);
