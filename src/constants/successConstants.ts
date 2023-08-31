@@ -5,17 +5,14 @@ const successConstant = {
     DATABASE_SYNC: {
         message: "Database synchronized successfully."
     },
-    UPDATE_SUCCESS: {
-        message: "Successfully Updated"
+    REGISTER_SUCCESS: {
+        message: "The user has been registered successfully!"
     },
-    DELETE_SUCCESS: {
-        message: "Successfully Deleted"
+    MAIL_VERIFY_SUCCESS: {
+        message: "Mail Verified Successfully"
     },
-    COURSE_FETCHED: {
-        message: "Fetched Successfully"
-    },
-    COURSE_CREATED: {
-        message: "Course Successfully Created"
+    LOGIN_SUCCESS: {
+        message: "Logged In Successfully"
     }
 };
 
