@@ -14,7 +14,7 @@ const successConstant = {
     FETCHED: {
         message: "Fetched Successfully"
     },
-    COURSE_CREATED: {
+    CREATED: {
         message: "Course Successfully Created"
     }
 };
