@@ -34,7 +34,7 @@ class CourseController {
         const { name, description, created_by } = req.body;
         try {
             const course = await courseService.createCourse(name, description, created_by);
-            return responseGenerator.getSuccessResponse(res, successEnums.COURSE_CREATED, course);
+            return responseGenerator.getSuccessResponse(res, successEnums.CREATED, course);
         } catch (error: any) {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 500);
