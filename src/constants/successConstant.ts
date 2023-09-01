@@ -11,7 +11,7 @@ const successConstant = {
     DELETE_SUCCESS: {
         message: "Successfully Deleted"
     },
-    COURSE_FETCHED: {
+    FETCHED: {
         message: "Fetched Successfully"
     },
     COURSE_CREATED: {
