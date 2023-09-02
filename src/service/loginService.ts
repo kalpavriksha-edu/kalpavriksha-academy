@@ -5,76 +5,81 @@ import LoginModel from '../models/loginRegisterModel';
 import randomstring from 'randomstring';
 import MailSender from '../helpers/sendMail';
 import jwt from 'jsonwebtoken';
-import dbConfig from '../config/dbConfig';  
+import {dbConfig} from '../config/dbConfig';  
 import errorConstants from '../constants/errorConstants'; 
-import successConstants from '../constants/sucessConstants'; 
+import successConstants from '../constants/sucessConstant'; 
 import LoggerManager from '../utility/logger'; 
 
 const logger = LoggerManager.getLogger();
 
-class UserService {
+class LoginService {
   public async register(req: Request, res: Response) {
     try {
       const errors = validationResult(req);
-
+  
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return { success: false, errors: errors.array() };
       }
-
+  
       const existingUser = await LoginModel.findOne({ where: { email: req.body.email } });
-
+  
       if (existingUser) {
-        return res.status(409).send({
-          msg: errorConstants.USER_ALREADY_EXISTS.message,
-        });
+        return { success: false, msg: errorConstants.USER_ALREADY_EXISTS.message };
       } else {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
+  
         const newUser = await LoginModel.create({
           name: req.body.name,
           role: req.body.role,
           email: req.body.email,
           password: hashedPassword,
         });
-
-        const mailSubject = 'Mail Verification';
-        const randomToken = randomstring.generate();
-        const content =
-          `<p> Hi ${req.body.name}, Please <a href="http://localhost:3000/mail-verification?token=${randomToken}">verify your account</a></p>`;
-
-        MailSender.sendMail(req.body.email, mailSubject, content);
-
-        newUser.token = randomToken;
-        await newUser.save();
-
-        return res.status(200).send({
-          msg: successConstants.REGISTER_SUCCESS.message,
-        });
+  
+        const result = await this.sendVerificationEmail(req.body.email, req.body.name);
+  
+        if (result.success) {
+          newUser.token = result.token;
+          await newUser.save();
+          return { success: true, msg: successConstants.REGISTER_SUCCESS.message };
+        } else {
+          return { success: false, msg: errorConstants.EMAIL_VERIFICATION_ERROR.message };
+        }
       }
     } catch (error) {
       logger.error('Error during user registration:', error);
-      return res.status(500).send({
-        msg: errorConstants.INTERNAL_SERVER_ERROR.message,
-      });
+      return { success: false, msg: errorConstants.INTERNAL_SERVER_ERROR.message };
     }
   }
-
-  public async verifyMail(req: Request, res: Response) {
+  
+  private async sendVerificationEmail(email: string, name: string) {
     try {
-      const token = req.query.token;
-      const user = await LoginModel.findOne({ where: { token } });
+      const mailSubject = 'Mail Verification';
+      const randomToken = randomstring.generate();
+      const content = `<p> Hi ${name}, Please <a href="http://localhost:3000/mailVerification?token=${randomToken}">verify your account</a></p>`;
+  
+      await MailSender.sendMail(email, mailSubject, content);
+  
+      return { success: true, token: randomToken };
+    } catch (error) {
+      console.log('Error sending mail:', error.message);
+      return { success: false };
+    }
+  }
+  
 
+  public async verifyMail(req: Request) {
+    try {
+      const token = req.query.token as string;
+      const user = await LoginModel.findOne({ where: { token } });
       if (user) {
-        const newToken = req.query.token as string;
-        user.token = newToken;
-        await user.save();
-        return res.render('mail-verification', { message: successConstants.MAIL_VERIFY_SUCCESS.message });
+        await user.update({ token: null });
+        return { message: successConstants.MAIL_VERIFY_SUCCESS.message };
       } else {
-        return res.render('404');
+        throw new Error('User not found');
       }
     } catch (error) {
       logger.error('Error during email verification:', error);
-      return res.render('404');
+      throw error;
     }
   }
 
@@ -116,7 +121,7 @@ class UserService {
         msg: errorConstants.INTERNAL_SERVER_ERROR.message,
       });
     }
-  }
+  }  
 }
 
-export default UserService;
+export default LoginService;

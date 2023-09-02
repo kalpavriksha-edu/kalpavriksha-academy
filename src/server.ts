@@ -1,57 +1,58 @@
-import express, { Express, Request, Response } from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import './db/dbConnection';
-import RouteController from './routes/routes';
-import WebRouteController from './routes/webRoute';
-import LoggerManager from './utility/logger';
-import { responseGenerator } from './utility/responseGenerator';
-import errorConstant from './constants/errorConstants';
-import { Logger } from 'winston';
+import { type Request, type Response, type Express } from "express"
+import { type Logger } from "winston"
+import { port } from "./config/dbConfig"
+import express from "express"
+import bodyParser from "body-parser"
+import loggerManager from "./utility/logger"
+import router from "./routes/routes"
+import webRouter from "./routes/webRoute"
+import Database from "./db/dbConnection"
+import errorEnums from "./constants/errorConstants"
 
-class App {
-    private app: Express;
-    private logger: Logger;
+class Server {
+  private readonly PORT: string;
+  private readonly app: Express;
+  private readonly logger: Logger;
+  private readonly database: Database;
 
-    constructor() {
-        this.app = express();
-        this.logger = LoggerManager.getLogger();
-        this.setup();
-        this.routes();
-        this.errorHandling();
+  constructor() {
+    this.PORT = port.PORT;
+    this.logger = loggerManager.getLogger();
+    this.app = express();
+    this.database = new Database();
+  }
+
+  async start() {
+    try {
+      this.app.listen(this.PORT, () => {
+        console.log("Server is running at port..." + this.PORT);
+      })
+      await this.database.connect();
+      await this.database.syncDatabase();
+    } catch (error) {
+      this.logger.error(error);
     }
+    this.configureMiddleware();
+    this.setupRoutes();
+    this.handleInvalidUrlRequests();
+  }
 
-    private setup() {
-        this.app.use(cors());
-        this.app.use(express.json());
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: true }));
-    }
+  configureMiddleware() {
+    this.app.use(express.json());
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+  }
 
-    private routes() {
-        this.app.use('/user', RouteController);
-        this.app.use('/', WebRouteController);
-    }
+  setupRoutes() {
+    this.app.use('/', router);
+    this.app.use('/',webRouter);
+  }
 
-    private errorHandling() {
-        this.app.use((err: any, req: Request, res: Response) => {
-            err.statusCode = err.statusCode || 500;
-            err.message = err.message || errorConstant.INTERNAL_SERVER_ERROR.message;
-
-            this.logger.error(err);
-
-            return responseGenerator.getErrorResponse(res, err.statusCode);
-        });
-    }
-
-    
-
-    public start(port: number) {
-        this.app.listen(port, () => {
-            console.log(`Server is listening to port ${port}`);
-        });
-    }
+  handleInvalidUrlRequests() {
+    this.app.use((req: Request, res: Response) => {
+      res.status(404).json({ error: errorEnums.ERR_URL });
+    })
+  }
 }
 
-const app = new App();
-app.start(3000);
+const server = new Server();
+server.start();

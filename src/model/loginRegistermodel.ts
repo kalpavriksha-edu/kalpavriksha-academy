@@ -1,6 +1,8 @@
 import { Model, DataTypes} from "sequelize";
 import { DataType } from "sequelize-typescript";
-import dbConnection from "../db/dbConnection";
+import Database from "../db/dbConnection";
+
+const database = new Database();
 
 class LoginModel extends Model {
   public id!: number;
@@ -41,7 +43,7 @@ LoginModel.init(
     },
   
     {
-      sequelize: dbConnection.getSequelizeInstance(), 
+      sequelize: database.getSequelizeInstance(), 
       tableName: "user_table",
     }
   );

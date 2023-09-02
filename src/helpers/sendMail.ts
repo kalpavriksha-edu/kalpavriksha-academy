@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import dbConfig from '../config/dbConfig'; 
+import {SMTP_CONFIG} from '../config/dbConfig'; 
 
 class MailSender {
   private transporter: nodemailer.Transporter;
@@ -11,8 +11,8 @@ class MailSender {
       secure: false,
       requireTLS: true,
       auth: {
-        user: SMTP_MAIL,
-        pass: SMTP_PASSWORD,
+        user: SMTP_CONFIG.SMTP_MAIL,
+        pass: SMTP_CONFIG.SMTP_PASSWORD,
       },
     });
   }
@@ -20,7 +20,7 @@ class MailSender {
   async sendMail(email: string, mailSubject: string, content: string) {
     try {
       const mailOptions = {
-        from: SMTP_MAIL,
+        from: SMTP_CONFIG.SMTP_MAIL,
         to: email,
         subject: mailSubject,
         html: content,

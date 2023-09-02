@@ -1,42 +1,45 @@
-import { Sequelize } from 'sequelize';
-import dbConfig from '../config/dbConfig';
+import { Sequelize } from "sequelize"
+import  {dbConfig} from "../config/dbConfig"
+import loggerManager from "../utility/logger"
+import errorEnums from "../constants/errorConstants"
+import successEnums from "../constants/sucessConstant"
 
-class DatabaseConnection {
-  private sequelize: Sequelize;
+const logger = loggerManager.getLogger();
+class Database {
+  private readonly sequelize: Sequelize;
 
   constructor() {
-    const { DB_HOST, DB_PASS, MYSQL_DB } = dbConfig.DB_CONFIG;
-
-    this.sequelize = new Sequelize(MYSQL_DB, process.env.DB_USER, DB_PASS, {
-      host: DB_HOST,
+    this.sequelize = new Sequelize(dbConfig.DATABASE, dbConfig.USER, dbConfig.PASSWORD, {
+      host: dbConfig.HOST,
       dialect: 'mysql',
-      logging: false,
+      logging: false
     });
   }
 
   async connect() {
     try {
       await this.sequelize.authenticate();
-      console.log('Database connection has been established successfully.');
+      logger.info(successEnums.DATABASE_CONNECT);
     } catch (error) {
-      console.error('Unable to connect to the database:', error);
+      logger.error(errorEnums.ERR_DATABASE);
+      logger.error(error);
     }
   }
 
   async syncDatabase() {
     try {
       await this.sequelize.sync();
-      console.log('Database synchronized successfully.');
+      logger.info(successEnums.DATABASE_SYNC);
     } catch (error) {
-      console.error('Error syncing database:', error);
+      logger.error(errorEnums.ERR_DATABASE_SYNC);
+      logger.error(error);
     }
   }
 
   getSequelizeInstance() {
     return this.sequelize;
   }
+
 }
 
-const dbConnection = new DatabaseConnection();
-
-export default dbConnection;
+export default Database;
