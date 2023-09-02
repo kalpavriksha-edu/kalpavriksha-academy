@@ -12,7 +12,7 @@ class CourseController {
     public async getCourses(req: Request, res: Response) {
         try {
             const courses = await courseService.getCourses();
-            return responseGenerator.getSuccessResponse(res, successEnums.COURSE_FETCHED, courses);
+            return responseGenerator.getSuccessResponse(res, successEnums.FETCHED, courses);
         } catch (error) {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 500);
@@ -23,7 +23,7 @@ class CourseController {
         const id: number = req.params.id;
         try {
             const course = await courseService.getCourseById(id);
-            return responseGenerator.getSuccessResponse(res, successEnums.COURSE_FETCHED, course);
+            return responseGenerator.getSuccessResponse(res, successEnums.FETCHED, course);
         } catch (error) {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 404);
@@ -34,7 +34,7 @@ class CourseController {
         const { name, description, created_by } = req.body;
         try {
             const course = await courseService.createCourse(name, description, created_by);
-            return responseGenerator.getSuccessResponse(res, successEnums.COURSE_CREATED, course);
+            return responseGenerator.getSuccessResponse(res, successEnums.CREATED, course);
         } catch (error: any) {
             logger.error(error);
             return responseGenerator.getErrorResponse(res, 500);
