@@ -36,7 +36,7 @@ class CourseService {
         }
     }
 
-    public async deleteCourse(id: number) {
+    public async deleteCourse(id:number) {
         try {
             const affectedRows = await Course.destroy({
                 where: {
