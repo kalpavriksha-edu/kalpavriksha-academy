@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize"
 import  {dbConfig} from "../config/dbConfig"
 import loggerManager from "../utility/logger"
 import errorEnums from "../constants/errorConstants"
-import successEnums from "../constants/sucessConstant"
+import successEnums from "../constants/successConstant"
 
 const logger = loggerManager.getLogger();
 class Database {
