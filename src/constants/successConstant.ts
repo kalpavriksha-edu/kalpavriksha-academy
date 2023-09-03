@@ -16,6 +16,15 @@ const successConstant = {
     },
     CREATED: {
         message: "Course Successfully Created"
+    },
+    REGISTER_SUCCESS: {
+        message: "The user has been registered successfully!"
+    },
+    MAIL_VERIFY_SUCCESS: {
+        message: "Mail Verified Successfully"
+    },
+    LOGIN_SUCCESS: {
+        message: "Logged In Successfully"
     }
 };
 
