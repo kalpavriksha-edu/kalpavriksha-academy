@@ -5,7 +5,7 @@ import express from "express"
 import bodyParser from "body-parser"
 import loggerManager from "./utility/logger"
 import router from "./routes/courseRoutes"
-import Database from "./db/dbConnection"
+import Database, { database } from "./db/dbConnection"
 import errorEnums from "./constants/errorConstants"
 
 class Server {
@@ -18,7 +18,7 @@ class Server {
     this.PORT = port.PORT;
     this.logger = loggerManager.getLogger();
     this.app = express();
-    this.database = new Database();
+    this.database = database;
   }
 
   async start() {
@@ -42,7 +42,7 @@ class Server {
   }
 
   setupRoutes() {
-    this.app.use('/', router);
+    this.app.use("/", router);
   }
 
   handleInvalidUrlRequests() {
