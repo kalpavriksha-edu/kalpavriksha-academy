@@ -1,12 +1,10 @@
 import { DataTypes, Model } from "sequelize"
-import Database from "../db/dbConnection"
-
-const database = new Database();
+import { database } from "../db/dbConnection"
 
 class Course extends Model { };
 
 Course.init({
-    course_id: {
+    courseId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -18,14 +16,10 @@ Course.init({
     },
     description: {
         type: DataTypes.STRING
-    },
-    created_by: {
-        type: DataTypes.STRING,
-        allowNull: false
     }
 }, {
     sequelize: database.getSequelizeInstance(),
-    modelName: 'Course',
+    tableName: 'courses',
     timestamps: true
 });
 

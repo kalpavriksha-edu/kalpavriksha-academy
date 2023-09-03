@@ -20,7 +20,7 @@ class Server {
     this.PORT = port.PORT;
     this.logger = loggerManager.getLogger();
     this.app = express();
-    this.database = new Database();
+    this.database = database;
   }
 
   async start() {
