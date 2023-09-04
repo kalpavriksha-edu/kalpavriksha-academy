@@ -1,12 +1,12 @@
 import { Router } from "express"
 import courseController from "../controllers/courseController"
 
-const router = Router();
+const courseRouter = Router();
 
-router.get('/courses', courseController.getCourses);
-router.get('/course/:id', courseController.getCourseById);
-router.post('/course', courseController.createCourse);
-router.patch('/course/:id', courseController.updateCourse);
-router.delete('/course/:id', courseController.deleteCourse);
+courseRouter.get('/courses', courseController.getCourses);
+courseRouter.get('/course/:id', courseController.getCourseById);
+courseRouter.post('/course', courseController.createCourse);
+courseRouter.patch('/course/:id', courseController.updateCourse);
+courseRouter.delete('/course/:id', courseController.deleteCourse);
 
-export default router;
+export default courseRouter;
