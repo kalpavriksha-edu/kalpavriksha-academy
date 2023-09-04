@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
-import LoginModel from '../models/loginRegisterModel';
+import LoginModel from '../model/loginRegistermodel';
 import randomstring from 'randomstring';
 import MailSender from '../helpers/sendMail';
 import jwt from 'jsonwebtoken';
 import {dbConfig} from '../config/dbConfig';  
 import errorConstants from '../constants/errorConstants'; 
-import successConstants from '../constants/sucessConstant'; 
+import successConstants from '../constants/successConstant'; 
 import LoggerManager from '../utility/logger'; 
 
 const logger = LoggerManager.getLogger();
@@ -16,57 +16,44 @@ class LoginService {
   public async register(req: Request, res: Response) {
     try {
       const errors = validationResult(req);
-  
       if (!errors.isEmpty()) {
         return { success: false, errors: errors.array() };
       }
-  
       const existingUser = await LoginModel.findOne({ where: { email: req.body.email } });
-  
       if (existingUser) {
         return { success: false, msg: errorConstants.USER_ALREADY_EXISTS.message };
       } else {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  
-        const newUser = await LoginModel.create({
-          name: req.body.name,
-          role: req.body.role,
-          email: req.body.email,
-          password: hashedPassword,
-        });
-  
-        const result = await this.sendVerificationEmail(req.body.email, req.body.name);
-  
-        if (result.success) {
-          newUser.token = result.token;
-          await newUser.save();
-          return { success: true, msg: successConstants.REGISTER_SUCCESS.message };
-        } else {
-          return { success: false, msg: errorConstants.EMAIL_VERIFICATION_ERROR.message };
-        }
+        const randomToken = randomstring.generate();
+
+        const newUser = await this.userRegister(req.body.name, req.body.role, req.body.email, req.body.password, randomToken);
+
+        await this.sendVerificationMail(newUser.email, newUser.name, randomToken);
+
+        return { success: true, msg: successConstants.REGISTER_SUCCESS.message };
       }
     } catch (error) {
       logger.error('Error during user registration:', error);
       return { success: false, msg: errorConstants.INTERNAL_SERVER_ERROR.message };
     }
   }
-  
-  private async sendVerificationEmail(email: string, name: string) {
-    try {
-      const mailSubject = 'Mail Verification';
-      const randomToken = randomstring.generate();
-      const content = `<p> Hi ${name}, Please <a href="http://localhost:3000/mailVerification?token=${randomToken}">verify your account</a></p>`;
-  
-      await MailSender.sendMail(email, mailSubject, content);
-  
-      return { success: true, token: randomToken };
-    } catch (error) {
-      console.log('Error sending mail:', error.message);
-      return { success: false };
-    }
+
+  public async userRegister(name: string, role: string, email: string, password: string, token: string) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await LoginModel.create({
+      name,
+      role,
+      email,
+      password: hashedPassword,
+      token,
+    });
+    return newUser;
+  }
+  public async sendVerificationMail(email: string, name: string, token: string) {
+    const mailSubject = 'Mail Verification';
+    const content = `<p> Hi ${name}, Please <a href="http://localhost:3000/mail-verification?token=${token}">verify your account</a></p>`;
+    await MailSender.sendMail(email, mailSubject, content);
   }
   
-
   public async verifyMail(req: Request) {
     try {
       const token = req.query.token as string;
