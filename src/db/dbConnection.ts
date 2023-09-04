@@ -7,7 +7,6 @@ import successEnums from "../constants/successConstant"
 const logger = loggerManager.getLogger();
 class Database {
   private readonly sequelize: Sequelize;
-  
   constructor() {
     this.sequelize = new Sequelize(dbConfig.DATABASE, dbConfig.USER, dbConfig.PASSWORD, {
       host: dbConfig.HOST,
