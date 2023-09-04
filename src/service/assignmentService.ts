@@ -12,7 +12,6 @@ class AssignmentService {
             return assignment;
         } catch (error) {
             logger.error(error.message);
-            logger.error(errorEnums.INT_SERVER_ERR);
         }
     }
 
@@ -47,7 +46,7 @@ class AssignmentService {
                 }
             });
             if (affectedRows === 0) {
-                throw new Error();
+                logger.error(errorEnums.ERR_INVALID_INPUT);
             }
             return successEnums.DELETE_SUCCESS;
         } catch (error) {
@@ -68,7 +67,6 @@ class AssignmentService {
             }
             return successEnums.UPDATE_SUCCESS;
         } catch (error) {
-            logger.error(error);
             logger.error(errorEnums.INT_SERVER_ERR);
         }
     }
