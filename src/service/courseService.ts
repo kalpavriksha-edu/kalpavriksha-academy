@@ -11,16 +11,20 @@ class CourseService {
             return courses;
         } catch (error) {
             logger.error(error.message);
-            logger.error(errorEnums.INT_SERVER_ERR);
         }
     }
 
     public async getCourseById(id: number) {
-        const course = await Course.findByPk(id);
-        if (!course) {
-            logger.error(errorEnums.ERR_INVALID_INPUT);
+        try {
+            const course = await Course.findByPk(id);
+            if (!course) {
+                logger.error(errorEnums.ERR_INVALID_INPUT);
+            }
+            return course;
+        } catch (error) {
+            logger.error(errorEnums.INT_SERVER_ERR);
         }
-        return course;
+
     }
 
     public async createCourse(name: string, description: string, created_by: string) {
@@ -32,7 +36,7 @@ class CourseService {
             });
             return course;
         } catch (error) {
-            logger.error(errorEnums.INT_SERVER_ERR);
+            logger.error(error.message);
         }
     }
 
@@ -44,11 +48,10 @@ class CourseService {
                 }
             });
             if (affectedRows === 0) {
-                throw new Error();
+                logger.error(errorEnums.ERR_INVALID_INPUT);
             }
             return successEnums.DELETE_SUCCESS;
         } catch (error) {
-            logger.error(error);
             logger.error(errorEnums.INT_SERVER_ERR);
         }
     }
@@ -66,7 +69,6 @@ class CourseService {
             return successEnums.UPDATE_SUCCESS;
         } catch (error) {
             logger.error(error);
-            logger.error(errorEnums.INT_SERVER_ERR);
         }
     }
 }

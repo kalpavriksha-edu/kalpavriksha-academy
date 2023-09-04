@@ -16,11 +16,16 @@ class AssignmentService {
     }
 
     public async getAssignmentById(id: number) {
-        const assignment = await Assignment.findByPk(id);
-        if (!assignment) {
-            logger.error(errorEnums.ERR_INVALID_INPUT);
+        try {
+            const assignment = await Assignment.findByPk(id);
+            if (!assignment) {
+                logger.error(errorEnums.ERR_INVALID_INPUT);
+            }
+            return assignment;
+        } catch (error) {
+            logger.error(errorEnums.INT_SERVER_ERR);
         }
-        return assignment;
+
     }
 
     public async createAssignment(name: string, description: string, max_score: number, created_by: string, topic_id: number) {
@@ -34,7 +39,7 @@ class AssignmentService {
             });
             return assignment;
         } catch (error) {
-            logger.error(errorEnums.INT_SERVER_ERR);
+            logger.error(error.message);
         }
     }
 
@@ -50,7 +55,6 @@ class AssignmentService {
             }
             return successEnums.DELETE_SUCCESS;
         } catch (error) {
-            logger.error(error);
             logger.error(errorEnums.INT_SERVER_ERR);
         }
     }
