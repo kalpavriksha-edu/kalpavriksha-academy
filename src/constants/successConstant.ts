@@ -15,7 +15,7 @@ const successConstant = {
         message: "Fetched Successfully"
     },
     CREATED: {
-        message: "Course Successfully Created"
+        message: "Successfully Created"
     },
     REGISTER_SUCCESS: {
         message: "The user has been registered successfully!"
