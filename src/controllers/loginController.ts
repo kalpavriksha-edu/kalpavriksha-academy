@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { responseGenerator } from '../utility/responseGenerator';
-import LoginService from '../services/loginService';
-import successConstant from '../constants/sucessConstant';
+import LoginService from '../service/loginService';
+import successConstant from '../constants/successConstant';
 import LoggerManager from '../utility/logger';
 
 const logger = LoggerManager.getLogger();
