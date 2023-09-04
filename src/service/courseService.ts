@@ -19,8 +19,9 @@ class CourseService {
             const course = await Course.findByPk(id);
             if (!course) {
                 logger.error(errorEnums.ERR_INVALID_INPUT);
+            } else {
+                return course;
             }
-            return course;
         } catch (error) {
             logger.error(errorEnums.INT_SERVER_ERR);
         }
@@ -49,8 +50,9 @@ class CourseService {
             });
             if (affectedRows === 0) {
                 logger.error(errorEnums.ERR_INVALID_INPUT);
+            } else {
+                return successEnums.DELETE_SUCCESS;
             }
-            return successEnums.DELETE_SUCCESS;
         } catch (error) {
             logger.error(errorEnums.INT_SERVER_ERR);
         }
@@ -65,8 +67,9 @@ class CourseService {
             })
             if (affectedRows === 0) {
                 logger.error(errorEnums.ERR_INVALID_INPUT);
+            } else {
+                return successEnums.UPDATE_SUCCESS;
             }
-            return successEnums.UPDATE_SUCCESS;
         } catch (error) {
             logger.error(error);
         }

@@ -20,8 +20,9 @@ class AssignmentService {
             const assignment = await Assignment.findByPk(id);
             if (!assignment) {
                 logger.error(errorEnums.ERR_INVALID_INPUT);
+            } else {
+                return assignment;
             }
-            return assignment;
         } catch (error) {
             logger.error(errorEnums.INT_SERVER_ERR);
         }
@@ -52,8 +53,9 @@ class AssignmentService {
             });
             if (affectedRows === 0) {
                 logger.error(errorEnums.ERR_INVALID_INPUT);
+            } else {
+                return successEnums.DELETE_SUCCESS;
             }
-            return successEnums.DELETE_SUCCESS;
         } catch (error) {
             logger.error(errorEnums.INT_SERVER_ERR);
         }
@@ -68,8 +70,9 @@ class AssignmentService {
             })
             if (affectedRows === 0) {
                 logger.error(errorEnums.ERR_INVALID_INPUT);
+            } else {
+                return successEnums.UPDATE_SUCCESS;
             }
-            return successEnums.UPDATE_SUCCESS;
         } catch (error) {
             logger.error(errorEnums.INT_SERVER_ERR);
         }
