@@ -3,6 +3,8 @@ import loggerManager from "../utility/logger";
 import successEnums from "../constants/successConstant";
 import { responseGenerator } from "../utility/responseGenerator";
 import UserService from "../service/userService";
+import UserModel from "../model/userModel";
+import Roles from "../config/roles";
 
 const logger = loggerManager.getLogger();
 const userService = new UserService();
@@ -18,7 +20,7 @@ export class UserController {
       );
     } catch (error) {
       logger.error(error);
-      return responseGenerator.getErrorResponse(res, 500);
+      return responseGenerator.getErrorResponse(res, error);
     }
   }
 
@@ -39,33 +41,47 @@ export class UserController {
       );
     } catch (error: any) {
       logger.error(error);
-      return responseGenerator.getErrorResponse(res, 500);
+      return responseGenerator.getErrorResponse(res, error);
     }
   }
 
   public async getUserById(req: Request, res: Response) {
     const id: number = Number(req.params.id);
     try {
-        const user = await userService.getUserById(id);
-        return responseGenerator.getSuccessResponse(res, successEnums.COURSE_FETCHED, user);
+      const user = await userService.getUserById(id);
+      return responseGenerator.getSuccessResponse(
+        res,
+        successEnums.USER_FETCHED,
+        user
+      );
     } catch (error) {
-        logger.error(error);
-        return responseGenerator.getErrorResponse(res, 404);
+      logger.error(error.code);
+      return responseGenerator.getErrorResponse(res, error);
     }
-}
+  }
 
   public async updateUserById(req: Request, res: Response) {
     try {
       const id: number = Number(req.params.id);
-      let { name, email, password } = req.body;
-      await userService.updateUserById(id, name, email, password);
+      const data = await UserModel.findOne({
+        where: {
+          id: id,
+        },
+      });
+      if (!data) {
+        return responseGenerator.getErrorResponse(res, 404);
+      }
+
+      const body = req.body;
+      await userService.updateUserById(id, body);
+
       return responseGenerator.getSuccessResponse(
         res,
         successEnums.UPDATE_SUCCESS
       );
     } catch (error) {
       logger.error(error);
-      return responseGenerator.getErrorResponse(res, 404);
+      return responseGenerator.getErrorResponse(res, error);
     }
   }
 
@@ -80,22 +96,22 @@ export class UserController {
       );
     } catch (error) {
       logger.error(error);
-      return responseGenerator.getErrorResponse(res, 404);
+      return responseGenerator.getErrorResponse(res, error);
     }
   }
 
   public async userLogin(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-       const jsontoken = await userService.userLogin(email,password);
-       return responseGenerator.getSuccessResponse(
+      const jsontoken = await userService.userLogin(email, password);
+      return responseGenerator.getSuccessResponse(
         res,
         successEnums.LOGIN_SUCCSESS,
         jsontoken
-    )
-      } catch (error) {
+      );
+    } catch (error) {
       logger.error(error);
-      return responseGenerator.getErrorResponse(res,401);
+      return responseGenerator.getErrorResponse(res, error);
     }
   }
 }
