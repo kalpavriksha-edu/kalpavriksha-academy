@@ -1,10 +1,12 @@
 import UserModel from "../model/userModel";
 import loggerManager from "../utility/logger";
 import errorEnums from "../constants/errorConstants";
+import errorConstant from "../constants/errorConstants";
 import successEnums from "../constants/successConstant";
 import { genSaltSync, hashSync, compareSync } from "bcryptjs";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { responseGenerator } from "../utility/responseGenerator";
 
 const logger = loggerManager.getLogger();
 
@@ -19,20 +21,30 @@ interface UserInterface {
 class UserService {
   public async getAllUsers() {
     try {
-      const allUsers: UserInterface[] = await UserModel.findAll({ raw: true });
+      const allUsers: UserInterface[] = await UserModel.findAll({
+        raw: true,
+        attributes: { exclude: ["password"] },
+      });
       return allUsers;
     } catch (error) {
       logger.error(error.message);
       logger.error(errorEnums.INT_SERVER_ERR);
+      throw responseGenerator.getError(error);
     }
   }
 
   public async getUserById(id: number) {
-    const user = await UserModel.findByPk(id);
-    if (!user) {
-      logger.error(errorEnums.ERR_INVALID_INPUT);
+    try {
+      const user = await UserModel.findByPk(id, {
+        attributes: { exclude: ["password"] },
+      });
+      if (!user) {
+        throw new Error(errorConstant.ERR_INVALID_INPUT.message);
+      }
+      return user.dataValues;
+    } catch (error) {
+      throw responseGenerator.getError(error);
     }
-    return user;
   }
 
   public async createNewUser(
@@ -53,35 +65,28 @@ class UserService {
 
       return newUser;
     } catch (error) {
-      logger.error(errorEnums.INT_SERVER_ERR);
+      logger.error(error);
+      throw responseGenerator.getError(error);
     }
   }
 
-  public async updateUserById(
-    id: number,
-    name: string,
-    email: string,
-    password: string
-  ) {
+  public async updateUserById(id: number, body) {
     try {
-      const salt = genSaltSync(10);
-      const hashPassword = hashSync(password, salt);
-      const [affectedRows] = await UserModel.update(
-        {
-          name: String(name),
-          email: String(email),
-          password: String(hashPassword),
-        },
-        { where: { id } }
-      );
+      if (body.password) {
+        const salt = genSaltSync(10);
+        const hashPassword = hashSync(body.password, salt);
+        body.password = hashPassword;
+      }
+      const [affectedRows] = await UserModel.update(body, { where: { id } });
 
       if (affectedRows === 0) {
-        logger.error(errorEnums.ERR_INVALID_INPUT);
+        logger.error(errorConstant.ERR_INVALID_INPUT.message);
+        throw new Error(errorConstant.ERR_INVALID_INPUT.message);
       }
       return successEnums.UPDATE_SUCCESS;
     } catch (error) {
       logger.error(error);
-      logger.error(errorEnums.INT_SERVER_ERR);
+      throw responseGenerator.getError(error);
     }
   }
 
@@ -89,12 +94,12 @@ class UserService {
     try {
       const affectedRows = await UserModel.destroy({ where: { id } });
       if (affectedRows === 0) {
-        throw new Error();
+        throw new Error(errorConstant.ERR_INVALID_INPUT.message);
       }
       return successEnums.DELETE_SUCCESS;
     } catch (error) {
       logger.error(error);
-      logger.error(errorEnums.INT_SERVER_ERR);
+      throw responseGenerator.getError(error);
     }
   }
 
@@ -103,7 +108,7 @@ class UserService {
       const user = await UserModel.findOne({ where: { email } });
 
       if (!user) {
-        return logger.error(errorEnums.ERR_INVALID_INPUT);
+        throw new Error(errorConstant.ERR_INVALID_INPUT.message);
       }
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -114,11 +119,11 @@ class UserService {
         });
         return jsontoken;
       } else {
-        throw new Error();
+        throw new Error(errorConstant.ERR_INVALID_INPUT.message);
       }
     } catch (error) {
-      logger.error(errorEnums.ERR_INVALID_INPUT);
-      throw new Error();
+      logger.error(error);
+      throw errorConstant.ERR_INVALID_INPUT;
     }
   }
 }
