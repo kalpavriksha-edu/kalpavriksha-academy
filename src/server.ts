@@ -1,13 +1,13 @@
-import { type Request, type Response, type Express } from "express";
-import { type Logger } from "winston";
-import { port } from "./config/dbConfig";
-import express from "express";
-import bodyParser from "body-parser";
-import loggerManager from "./utility/logger";
-import router from "./routes/courseRoutes";
-import Database from "./db/dbConnection";
-import errorEnums from "./constants/errorConstants";
-import Routes from "./routes/userRoutes";
+import { type Request, type Response, type Express } from "express"
+import { type Logger } from "winston"
+import { port } from "./config/dbConfig"
+import express from "express"
+import bodyParser from "body-parser"
+import loggerManager from "./utility/logger"
+import router from "./routes/courseRoutes"
+import Database from "./db/dbConnection"
+import errorEnums from "./constants/errorConstants"
+import Routes from "./routes/userRoutes"
 
 class Server {
   private readonly PORT: string;
