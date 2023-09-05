@@ -32,9 +32,9 @@
       "winston": "^3.10.0"
    },
    "scripts": {
+      "test": "jest",
       "start": "ts-node ./src/server.ts",
-      "dev": "nodemon --exec ts-node-esm ./src/server.ts",
-      "test": "jest"
+      "dev": "nodemon --exec ts-node-esm ./src/server.ts"
    },
    "jest": {
       "testEnvironment": "node",
