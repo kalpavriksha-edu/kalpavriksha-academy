@@ -34,12 +34,10 @@ UserModel.init(
       allowNull: false,
     },
   },
-
   {
-    sequelize: database.getSequelizeInstance(), 
+    sequelize: database.getSequelizeInstance(),
     tableName: "user_table",
+    timestamps: false,
   }
 );
-
 export default UserModel;
-
