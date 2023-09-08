@@ -7,6 +7,8 @@ import { genSaltSync, hashSync, compareSync } from "bcryptjs";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { responseGenerator } from "../utility/responseGenerator";
+import dotenv from "dotenv";
+dotenv.config();
 
 const logger = loggerManager.getLogger();
 
@@ -114,7 +116,7 @@ class UserService {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (isPasswordValid) {
         user.password = undefined;
-        const jsontoken = jwt.sign({ user }, "qwe1234", {
+        const jsontoken = jwt.sign({ user }, process.env.KEY, {
           expiresIn: "1h",
         });
         return jsontoken;
