@@ -13,6 +13,12 @@ const errorConstant = {
     },
     INT_SERVER_ERR: {
         message: "Internal Server Error"
+    },
+    INVALID_TOKEN: {
+        message: "Invalid token"
+    },
+    UNAUTH_USER : {
+        message: "Access denied!! Unauthorized user"
     }
 };
 

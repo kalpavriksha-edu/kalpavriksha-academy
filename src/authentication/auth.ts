@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verify, Secret, VerifyErrors } from "jsonwebtoken";
 import dotenv from "dotenv";
+import errorConstant from "../constants/errorConstants";
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ export default class Authorization {
           if (err) {
             res.status(403).json({
               success: false,
-              message: "Invalid token",
+              message: errorConstant.INVALID_TOKEN,
             });
           } else {
             next();
@@ -32,8 +33,8 @@ export default class Authorization {
       );
     } else {
       res.status(403).json({
-        success: 0,
-        message: "Access denied!! Unauthorized user",
+        success: false,
+        message: errorConstant.UNAUTH_USER,
       });
     }
   };
@@ -51,7 +52,10 @@ export default class Authorization {
             );
             if (decodedValue.user.role !== Role) {
               res.status(401);
-              return res.send("You are Not Allowed");
+              return res.json({
+                sucsess: false,
+                message: errorConstant.UNAUTH_USER
+              })
             }
 
             next();
@@ -59,19 +63,19 @@ export default class Authorization {
             console.error(err);
             res.status(403).json({
               success: false,
-              message: "Invalid token",
+              message: errorConstant.INVALID_TOKEN,
             });
           }
         } else {
           res.status(403).json({
             success: false,
-            message: "Invalid token format",
+            message: errorConstant.INVALID_TOKEN,
           });
         }
       } else {
         res.status(403).json({
           success: false,
-          message: "Access denied!! Unauthorized user",
+          message: errorConstant.UNAUTH_USER,
         });
       }
     };
