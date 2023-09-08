@@ -1,12 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import { verify, Secret, VerifyErrors } from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export default class Authorization {
-  public tokenValidation = (
+  public tokenValidation(
     req: Request,
     res: Response,
     next: NextFunction
-  ) => {
+  ){
     let token: string | string[] | undefined = req.get("authorization");
     if (token) {
       if (typeof token !== "string") {
@@ -15,7 +18,7 @@ export default class Authorization {
       token = token.slice(7);
       verify(
         token,
-        "qwe1234",
+        process.env.KEY,
         (err: VerifyErrors | null, decoded: object | undefined | string) => {
           if (err) {
             res.status(403).json({
