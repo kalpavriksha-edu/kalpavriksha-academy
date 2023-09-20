@@ -1,5 +1,5 @@
 # Kalpavriksha
 
-## Kalpavriksha backend server
+## Kalpavriksha frontend server
 
-This is repository for kalpavriksha backend server.
+This is repository for kalpavriksha frontend server.
