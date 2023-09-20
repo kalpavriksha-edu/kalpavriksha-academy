@@ -5,7 +5,7 @@ import express from "express"
 import bodyParser from "body-parser"
 import loggerManager from "./utility/logger"
 import router from "./routes/courseRoutes"
-import router from "./routes/loginroute"
+import loginrouter from "./routes/loginRoute"
 import webRouter from "./routes/webRoute"
 import Database from "./db/dbConnection"
 import errorEnums from "./constants/errorConstants"
@@ -45,6 +45,7 @@ class Server {
 
   setupRoutes() {
     this.app.use('/', router);
+    this.app.use('/', loginrouter);
     this.app.use('/',webRouter);
   }
 
