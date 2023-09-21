@@ -1,28 +1,38 @@
 import { Router } from "express";
 import Authorization from "../authentication/auth";
-import { UserController } from "../controllers/userController";
+import userController from "../controllers/userController";
 import Roles from "../config/roles";
 
-const userController = new UserController();
 const authorization = new Authorization();
-export default class Routes {
-  private router: Router = Router();
 
-  publicRoutes(): Router {
-    const publicRouter = Router();
-    publicRouter.post("/user", userController.createNewUser);
-    publicRouter.post("/user/login", userController.userLogin);
-    return publicRouter;
-  }
+const userRouter = Router();
 
-  protectedRoutes(): Router {
-    const protectedRouter = Router();
-    protectedRouter.use(authorization.tokenValidation);
-    protectedRouter.use(authorization.roleValidation(Roles.roles.Admin));
-    protectedRouter.patch("/user/:id", userController.updateUserById);
-    protectedRouter.get("/users", userController.getAllUsers);
-    protectedRouter.get("/user/:id", userController.getUserById);
-    protectedRouter.delete("/user/:id", userController.deleteUserById);
-    return protectedRouter;
-  }
-}
+userRouter.post("/user", userController.createNewUser);
+userRouter.post("/user/login", userController.userLogin);
+
+userRouter.patch(
+  "/user/:id",
+  authorization.tokenValidation,
+  authorization.roleValidation(Roles.roles.Admin),
+  userController.updateUserById
+);
+userRouter.get(
+  "/users",
+  authorization.tokenValidation,
+  authorization.roleValidation(Roles.roles.Admin),
+  userController.getAllUsers
+);
+userRouter.get(
+  "/user/:id",
+  authorization.tokenValidation,
+  authorization.roleValidation(Roles.roles.Admin),
+  userController.getUserById
+);
+userRouter.delete(
+  "/user/:id",
+  authorization.tokenValidation,
+  authorization.roleValidation(Roles.roles.Admin),
+  userController.deleteUserById
+);
+
+export default userRouter;

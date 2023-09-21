@@ -9,7 +9,7 @@ import Roles from "../config/roles";
 const logger = loggerManager.getLogger();
 const userService = new UserService();
 
-export class UserController {
+class UserController {
   public async getAllUsers(req: Request, res: Response) {
     try {
       const allUsers = await userService.getAllUsers();
@@ -115,3 +115,6 @@ export class UserController {
     }
   }
 }
+
+const userController = new UserController();
+export default userController;

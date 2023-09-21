@@ -7,7 +7,7 @@ import loggerManager from "./utility/logger"
 import router from "./routes/courseRoutes"
 import Database from "./db/dbConnection"
 import errorEnums from "./constants/errorConstants"
-import Routes from "./routes/userRoutes"
+import userRouter from "./routes/userRoutes"
 
 class Server {
   private readonly PORT: string;
@@ -44,10 +44,8 @@ class Server {
   }
 
   setupRoutes() {
-    const route = new Routes();
     this.app.use("/", router);
-    this.app.use("/", route.publicRoutes());
-    this.app.use("/", route.protectedRoutes());
+    this.app.use("/", userRouter);
   }
 
   handleInvalidUrlRequests() {
