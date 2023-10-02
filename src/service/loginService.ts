@@ -109,6 +109,23 @@ class LoginService {
       });
     }
   }  
+  public async googleAuth(req: Request, res: Response) {
+    passport.authenticate('google', { scope: ['profile', 'email'] })(req, res);
+  }
+  public async googleAuthCallback(req: Request, res: Response) {
+    passport.authenticate('google', (err, user, info) => {
+      if (err) {
+        logger.error('Google OAuth error:', err);
+        return res.status(500).send('Google OAuth error');
+      }
+  
+      if (!user) {
+        logger.error('Google OAuth authentication failed');
+        return res.status(401).send('Google OAuth authentication failed');
+      }
+      res.send(`Hello, ${user.name}`);
+    })(req, res);
+  } 
 }
 
 export default LoginService;

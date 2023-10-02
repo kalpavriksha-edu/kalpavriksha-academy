@@ -40,5 +40,15 @@ class LoginController {
       return responseGenerator.getErrorResponse(res, 500);
     }
   }
+  public async googleAuth(req: Request, res: Response) {
+    passport.authenticate('google', { scope: ['profile', 'email'] })(req, res);
+  }
+
+  public async googleAuthCallback(req: Request, res: Response) {
+    if (!req.user) {
+      return res.status(401).send('Unauthorized');
+    }
+    res.send(`Hello, ${req.user.name}`);
+  }
 }
 export default LoginController;
