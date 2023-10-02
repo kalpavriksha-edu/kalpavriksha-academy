@@ -3,6 +3,7 @@ import { responseGenerator } from '../utility/responseGenerator';
 import LoginService from '../service/loginService';
 import successConstant from '../constants/successConstant';
 import LoggerManager from '../utility/logger';
+import passport from 'passport';
 
 const logger = LoggerManager.getLogger();
 const loginService = new LoginService();

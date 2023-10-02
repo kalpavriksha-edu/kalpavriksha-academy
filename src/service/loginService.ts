@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
-import LoginModel from '../model/loginRegistermodel';
+import LoginModel from '../model/loginRegisterModel';
 import randomstring from 'randomstring';
 import MailSender from '../helpers/sendMail';
 import jwt from 'jsonwebtoken';
@@ -9,6 +9,7 @@ import {dbConfig} from '../config/dbConfig';
 import errorConstants from '../constants/errorConstants'; 
 import successConstants from '../constants/successConstant'; 
 import LoggerManager from '../utility/logger'; 
+import passport from '../authentication/passport';
 
 const logger = LoggerManager.getLogger();
 
