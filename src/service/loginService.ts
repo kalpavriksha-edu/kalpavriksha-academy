@@ -111,22 +111,26 @@ class LoginService {
     }
   }  
   public async googleAuth(req: Request, res: Response) {
-    passport.authenticate('google', { scope: ['profile', 'email'] })(req, res);
+    passport.authenticate('google', {
+      scope: ['email', 'profile'],
+    })(req, res);
   }
   public async googleAuthCallback(req: Request, res: Response) {
-    passport.authenticate('google', (err, user, info) => {
-      if (err) {
-        logger.error('Google OAuth error:', err);
-        return res.status(500).send('Google OAuth error');
-      }
+    passport.authenticate('google', {
+      failureRedirect: '/failed',
+    })(req, res, () => {
+      res.redirect('/success');
+    });
+  }
+  public async failed(req: Request, res: Response) {
+    console.log('User is not authenticated');
+    res.send("Failed");
+  }
   
-      if (!user) {
-        logger.error('Google OAuth authentication failed');
-        return res.status(401).send('Google OAuth authentication failed');
-      }
-      res.send(`Hello, ${user.name}`);
-    })(req, res);
-  } 
-}
+  public async success(req: Request,res: Response) {
+    console.log('You are logged in');
+    res.send(`Welcome ${req.user?.displayName}`);
+  }
+} 
 
 export default LoginService;
