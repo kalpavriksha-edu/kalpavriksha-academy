@@ -3,7 +3,6 @@ import { responseGenerator } from '../utility/responseGenerator';
 import LoginService from '../service/loginService';
 import successConstant from '../constants/successConstant';
 import LoggerManager from '../utility/logger';
-import passport from 'passport';
 
 const logger = LoggerManager.getLogger();
 const loginService = new LoginService();
@@ -42,14 +41,52 @@ class LoginController {
     }
   }
   public async googleAuth(req: Request, res: Response) {
-    passport.authenticate('google', { scope: ['profile', 'email'] })(req, res);
+    try {
+      loginService.googleAuth(req, res);
+    } catch (error) {
+      logger.error('Error in Google Auth:', error); 
+      res.status(500).send('Internal Server Error'); 
+    }
   }
 
   public async googleAuthCallback(req: Request, res: Response) {
-    if (!req.user) {
-      return res.status(401).send('Unauthorized');
+    try {
+      loginService.googleAuthCallback(req, res);
+    } catch (error) {
+      logger.error('Error in Google Auth Callback:', error); 
+      res.status(500).send('Internal Server Error'); 
     }
-    res.send(`Hello, ${req.user.name}`);
+  }
+   
+  public async failed(req: Request, res: Response) {
+    try {
+      loginService.failed(req, res);
+    } catch (error) {
+      logger.error('Error in Failed:', error);
+      return responseGenerator.getErrorResponse(res, 500);
+    }
+  }
+
+  public async success(req: Request, res: Response) {
+    try {
+      loginService.success(req, res);
+    } catch (error) {
+      logger.error('Error in Success:', error);
+      return responseGenerator.getErrorResponse(res, 500);
+    }
+  }
+
+  public async logout(req: Request, res: Response){
+    req.session.destroy((err) => {
+      if (err) {
+        console.log('Error while destroying session:', err);
+      } else {
+        req.logout(() => {
+          console.log('You are logged out');
+          res.redirect('/');
+        });
+      }
+    });
   }
 }
 export default LoginController;
