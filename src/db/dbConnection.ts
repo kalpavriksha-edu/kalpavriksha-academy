@@ -5,7 +5,7 @@ import errorEnums from "../constants/errorConstants"
 import successEnums from "../constants/successConstant"
 
 const logger = loggerManager.getLogger();
-class Database {
+export class Database {
   private readonly sequelize: Sequelize;
 
   constructor() {
@@ -42,4 +42,5 @@ class Database {
 
 }
 
-export default Database;
+const database = new Database();
+export default database;

@@ -8,7 +8,7 @@ import loggerManager from "./utility/logger"
 import router from "./routes/courseRoutes"
 import loginrouter from "./routes/loginRoute"
 import webRouter from "./routes/webRoute"
-import Database from "./db/dbConnection"
+import database, { Database } from "./db/dbConnection"
 import errorEnums from "./constants/errorConstants"
 import passport from "./authentication/passport"
 
@@ -22,7 +22,7 @@ class Server {
     this.PORT = port.PORT;
     this.logger = loggerManager.getLogger();
     this.app = express();
-    this.database = new Database();
+    this.database = database;
   }
 
   async start() {

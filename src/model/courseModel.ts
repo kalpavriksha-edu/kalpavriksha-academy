@@ -1,7 +1,5 @@
 import { DataTypes, Model } from "sequelize"
-import Database from "../db/dbConnection"
-
-const database = new Database();
+import database from "../db/dbConnection"
 
 class Course extends Model { };
 
