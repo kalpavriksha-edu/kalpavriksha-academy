@@ -14,17 +14,14 @@ passport.use(
     },
     async (request: Request, accessToken, refreshToken, profile, done) => {
       try {
-        const existingUser = await LoginModel.findOne({ where: { googleId: profile.id } });
-
+        const existingUser = await LoginModel.findOne({ where: { email: profile.emails[0].value } });
         if (existingUser) {
-          return done(null, existingUser);
+          const user = {
+           displayName: profile.displayName,
+         };
+          return done(null, user);
         }
-        const newUser = await LoginModel.create({
-          id: profile.id,
-          name: profile.name,
-        });
-
-        return done(null, newUser);
+        return done(null, false);
       } catch (error) {
         return done(error);
       }
