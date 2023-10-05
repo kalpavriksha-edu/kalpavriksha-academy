@@ -124,7 +124,7 @@ class LoginService {
   }
   public async failed(req: Request, res: Response) {
     console.log('User is not authenticated');
-    res.send("Failed");
+    res.send("Failed:Please Register");
   }
   
   public async success(req: Request,res: Response) {
