@@ -8,7 +8,7 @@
       "module": "commonjs",
       "moduleResolution": "node",
       "outDir": "./dest",
-      "rootDir": "./src", 
+      "rootDir": "./", 
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "esModuleInterop": true,
