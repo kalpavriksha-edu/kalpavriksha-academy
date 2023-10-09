@@ -21,7 +21,7 @@ interface UserInterface {
 }
 
 class UserService {
-  public async getAllUsers() {
+  public async getAllUsers(): Promise< any[]> {
     try {
       const allUsers: UserInterface[] = await UserModel.findAll({
         raw: true,
@@ -35,7 +35,7 @@ class UserService {
     }
   }
 
-  public async getUserById(id: number) {
+  public async getUserById(id: number){
     try {
       const user = await UserModel.findByPk(id, {
         attributes: { exclude: ["password"] },
