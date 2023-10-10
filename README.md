@@ -2,6 +2,8 @@
 
 ## Kalpavriksha frontend server
 
+This is repository for kalpavriksha frontend server
+
 ### Getting Started
 
 Follow these steps to get this project up and running on your local machine.
