@@ -3,6 +3,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Request } from 'express';
 import LoginModel from '../model/loginRegisterModel';
 import {dbConfig} from '../config/dbConfig';
+import logger from '../utility/logger';
 
 passport.use(
   new GoogleStrategy(
@@ -23,6 +24,7 @@ passport.use(
         }
         return done(null, false);
       } catch (error) {
+        logger.error('Error in authentication callback:', error);
         return done(error);
       }
     }
