@@ -79,10 +79,10 @@ class LoginController {
   public async logout(req: Request, res: Response){
     req.session.destroy((err) => {
       if (err) {
-        console.log('Error while destroying session:', err);
+        logger.error('Error while destroying session:', err);
       } else {
         req.logout(() => {
-          console.log('You are logged out');
+          logger.info('You are logged out');
           res.redirect('/');
         });
       }
