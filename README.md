@@ -1,8 +1,8 @@
-# React TypeScript App
+# Kalpavriksha
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Kalpavriksha frontend server
 
-## Getting Started
+### Getting Started
 
 Follow these steps to get this project up and running on your local machine.
 
