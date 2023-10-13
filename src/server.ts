@@ -5,6 +5,7 @@ import express from "express"
 import bodyParser from "body-parser"
 import loggerManager from "./utility/logger"
 import router from "./routes/courseRoutes"
+import topicRouter from "./routes/topicRoutes"
 import loginrouter from "./routes/loginRoute"
 import webRouter from "./routes/webRoute"
 import database, { Database } from "./db/dbConnection"
@@ -47,6 +48,8 @@ class Server {
     this.app.use('/', router);
     this.app.use('/', loginrouter);
     this.app.use('/',webRouter);
+    this.app.use('/',topicRouter);
+
   }
 
   handleInvalidUrlRequests() {
