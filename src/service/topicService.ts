@@ -1,5 +1,7 @@
 import Topic from "../model/topicModel";
 import logger from '../utility/logger';
+import errorEnums from "../constants/errorConstants"
+import successEnums from "../constants/successConstant"
 
 
 
@@ -9,19 +11,17 @@ class TopicService {
     public async getTopic() {
         try {
             const topic = await Topic.findAll();
-
             return topic;
         } catch (error) {
-            logger.error('An error occurred:', error.message);
-            logger.error('Stack trace:', error.stack);
-            throw new Error('Internal server error');
+            logger.error(error.message);
+            logger.error(errorEnums.INT_SERVER_ERR);
         }
     };
 
     public async getTopicById(id: number) {
         const topic = await Topic.findByPk(id);
         if (!topic) {
-            throw new Error(`Resourse Not Found`);
+            logger.error(errorEnums.ERR_INVALID_INPUT);
         }
         return topic;
     };
@@ -35,7 +35,6 @@ class TopicService {
         if (!topic) {
             throw new Error(`Resourse Not Found`);
         }
-
         return topic;
     };
 
@@ -50,41 +49,47 @@ class TopicService {
             });
             return topic;
         } catch (error) {
-            throw new Error('Internal server error');
+            logger.error(errorEnums.INT_SERVER_ERR);
         }
     };
 
-    public async deleteTopic(id: number) {
-        const affectedRows = await Topic.destroy({
-            where: {
-                topic_id : id
+    public async deleteTopic(id: number) 
+    {
+        try
+        {
+            const affectedRows = await Topic.destroy({
+                where: {
+                    topic_id : id
+                }
+            });
+            if (affectedRows === 0) {
+                throw new Error();
             }
-        });
-        if (affectedRows === 0) {
-            throw new Error('Resource Not Found');
+            return successEnums.DELETE_SUCCESS;
         }
-        return "Successfully Deleted";
-    } catch(error: Error) {
-        logger.error('An error occurred:', error);
-        throw new Error('Internal server error');
-    };
+        catch (error) {
+            logger.error(error);
+            logger.error(errorEnums.INT_SERVER_ERR);
+        };
+    }
 
     public async updateTopic(id: number, updates: Object) {
         try {
             const [affectedRows] = await Topic.update(updates, {
                 where: {
-                    topic_id : id,
-                },
-            });
+                    course_id: id
+                }
+            })
             if (affectedRows === 0) {
-                throw new Error(`Resources Not Found`);
+                logger.error(errorEnums.ERR_INVALID_INPUT);
             }
-            return "Successfully Updated";
+            return successEnums.UPDATE_SUCCESS;
         } catch (error) {
-            logger.error('An error occurred:', error);
-            throw new Error('Internal server error');
-        };
-    };
-}
+            logger.error(error);
+            logger.error(errorEnums.INT_SERVER_ERR);
+        }
+        }
+    }
+
 
 export default TopicService;
