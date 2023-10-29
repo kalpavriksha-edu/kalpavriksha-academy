@@ -2,6 +2,7 @@ import { type Request, type Response, type Express } from "express"
 import { type Logger } from "winston"
 import { port } from "./config/dbConfig"
 import express from "express"
+import session from 'express-session'
 import bodyParser from "body-parser"
 import loggerManager from "./utility/logger"
 import router from "./routes/courseRoutes"
@@ -9,6 +10,7 @@ import loginrouter from "./routes/loginRoute"
 import webRouter from "./routes/webRoute"
 import database, { Database } from "./db/dbConnection"
 import errorEnums from "./constants/errorConstants"
+import passport from "./authentication/passport"
 
 class Server {
   private readonly PORT: string;
@@ -25,6 +27,15 @@ class Server {
 
   async start() {
     try {
+      this.app.use(
+        session({
+          secret: 'Secret-key',
+          resave: false,
+          saveUninitialized: true,
+        })
+      );
+      this.app.use(passport.initialize());
+      this.app.use(passport.session());
       this.app.listen(this.PORT, () => {
         console.log("Server is running at port..." + this.PORT);
       })
@@ -47,8 +58,10 @@ class Server {
     this.app.use('/', router);
     this.app.use('/', loginrouter);
     this.app.use('/',webRouter);
-  }
-
+    this.app.get('/',(req,res)=>{
+      res.send('<a href="/auth/google"> Authenticate with Google</a>')});
+    }
+  
   handleInvalidUrlRequests() {
     this.app.use((req: Request, res: Response) => {
       res.status(404).json({ error: errorEnums.ERR_URL });

@@ -40,5 +40,53 @@ class LoginController {
       return responseGenerator.getErrorResponse(res, 500);
     }
   }
+  public async googleAuth(req: Request, res: Response) {
+    try {
+      loginService.googleAuth(req, res);
+    } catch (error) {
+      logger.error('Error in Google Auth:', error); 
+      res.status(500).send('Internal Server Error'); 
+    }
+  }
+
+  public async googleAuthCallback(req: Request, res: Response) {
+    try {
+      loginService.googleAuthCallback(req, res);
+    } catch (error) {
+      logger.error('Error in Google Auth Callback:', error); 
+      res.status(500).send('Internal Server Error'); 
+    }
+  }
+   
+  public async failed(req: Request, res: Response) {
+    try {
+      loginService.failed(req, res);
+    } catch (error) {
+      logger.error('Error in Failed:', error);
+      return responseGenerator.getErrorResponse(res, 500);
+    }
+  }
+
+  public async success(req: Request, res: Response) {
+    try {
+      loginService.success(req, res);
+    } catch (error) {
+      logger.error('Error in Success:', error);
+      return responseGenerator.getErrorResponse(res, 500);
+    }
+  }
+
+  public async logout(req: Request, res: Response){
+    req.session.destroy((err) => {
+      if (err) {
+        logger.error('Error while destroying session:', err);
+      } else {
+        req.logout(() => {
+          logger.info('You are logged out');
+          res.redirect('/');
+        });
+      }
+    });
+  }
 }
 export default LoginController;
