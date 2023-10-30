@@ -1,7 +1,35 @@
-import courseService from '../../src/service/courseService'
+import courseService, { CourseService } from "../../src/service/courseService"
+import successEnums from "../../src/constants/successConstant"
+
+let courseServices: CourseService;
+
+beforeAll(async () => {
+    courseServices = new courseService();
+});
+
+afterAll(async () => {
+    const courses = await courseServices.getCourses();
+    const deletionPromises = courses.map(async (course: any) => {
+        let Id = course.course_id;
+        await courseServices.deleteCourse(Id);
+    });
+    await Promise.all(deletionPromises);
+});
 
 describe('courseService', () => {
-    const courseServices = new courseService();
+
+    it('should create a new course', async () => {
+        let newCourse = {
+            name: 'CPP',
+            description: 'This course is for C++.',
+        };
+        let createdCourse = await courseServices.createCourse(
+            newCourse.name,
+            newCourse.description
+        );
+        expect(createdCourse.dataValues.name).toBe(newCourse.name);
+        expect(createdCourse.dataValues.description).toBe(newCourse.description);
+    });
 
     it('should fetch courses', async () => {
         const courses = await courseServices.getCourses();
@@ -9,38 +37,54 @@ describe('courseService', () => {
     });
 
     it('should fetch a course by ID', async () => {
-        const courseId = 20;
-        const course = await courseServices.getCourseById(courseId);
-        expect(course).toBeDefined();
-    });
-
-    it('should create a new course', async () => {
-        const newCourse = {
+        let newCourse = {
             name: 'CPP',
             description: 'This course is for C++.',
-            created_by: 'Rohit',
         };
-        const createdCourse = await courseServices.createCourse(
+        let createdCourse = await courseServices.createCourse(
             newCourse.name,
-            newCourse.description,
-            newCourse.created_by
+            newCourse.description
         );
-        expect(createdCourse).toBeDefined();
+        let courseId = createdCourse.dataValues.course_id;
+        let course = await courseServices.getCourseById(courseId);
+        expect(course.dataValues.name).toBe(newCourse.name);
+        expect(course.dataValues.description).toBe(newCourse.description);
     });
 
     it('should update a course', async () => {
-        const courseId = 22;
-        const updatedCourseData = {
-            created_by: 'David',
+        let newCourse = {
+            name: 'CPP',
+            description: 'This course is for C++.',
         };
-        await courseServices.updateCourse(courseId, updatedCourseData);
-        const updatedCourse = await courseServices.getCourseById(courseId);
-        expect(updatedCourse).toBeDefined();
+        let createdCourse = await courseServices.createCourse(
+            newCourse.name,
+            newCourse.description
+        );
+        expect(createdCourse.dataValues.name).toBe(newCourse.name);
+        expect(createdCourse.dataValues.description).toBe(newCourse.description);
+
+        let courseId = createdCourse.dataValues.course_id;
+        const updatedCourseData = {
+            description: 'Learn CPP.',
+        };
+        const updatedCourse = await courseServices.updateCourse(courseId, updatedCourseData);
+        expect(updatedCourse).toBe(successEnums.UPDATE_SUCCESS);
     });
 
     it('should delete a course', async () => {
-        const courseId = 17;
+        let newCourse = {
+            name: 'CPP',
+            description: 'This course is for C++.',
+        };
+        let createdCourse = await courseServices.createCourse(
+            newCourse.name,
+            newCourse.description
+        );
+        expect(createdCourse.dataValues.name).toBe(newCourse.name);
+        expect(createdCourse.dataValues.description).toBe(newCourse.description);
+
+        let courseId = createdCourse.dataValues.course_id;
         const courseDeleted = await courseServices.deleteCourse(courseId);
-        expect(courseDeleted).toBeDefined();
+        expect(courseDeleted).toBe(successEnums.DELETE_SUCCESS);
     });
 });
