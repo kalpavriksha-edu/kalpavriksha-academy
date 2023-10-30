@@ -39,7 +39,7 @@
       "winston": "^3.10.0"
    },
    "scripts": {
-      "test": "jest",
+      "test": "jest --coverage --no-cache",
       "start": "ts-node ./src/server.ts",
       "dev": "nodemon --exec ts-node-esm ./src/server.ts"
    },
@@ -47,9 +47,6 @@
       "testEnvironment": "node",
       "preset": "ts-jest",
       "detectOpenHandles": true,
-      "coveragePathIgnorePatterns": [
-         "/node_modules/",
-         "/src"
-      ]
+      "rootDir": "./"
    }
 }

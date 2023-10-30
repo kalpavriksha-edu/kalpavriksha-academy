@@ -1,8 +1,8 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import Course from '../model/courseModel'
-import Database from "../db/dbConnection"
+import database from "../db/dbConnection"
 
-const database = new Database();
+//const database = new Database();
 database.connect()
 database.syncDatabase()
 const sequelize=database.getSequelizeInstance()
