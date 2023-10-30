@@ -5,17 +5,10 @@ import logger from '../utility/logger';
 
 class TopicService {
     
-
     public async getTopic() {
-        try {
-            const topic = await Topic.findAll();
-
-            return topic;
-        } catch (error) {
-            logger.error('An error occurred:', error.message);
-            logger.error('Stack trace:', error.stack);
-            throw new Error('Internal server error');
-        }
+        const topic = await Topic.findAll();
+        return topic;
+        
     };
 
     public async getTopicById(id: number) {
@@ -27,16 +20,16 @@ class TopicService {
     };
 
     public async getTopicByCourseId(id: number) {
-        const topic = await Topic.findAll({
+        const topics = await Topic.findAll({
             where : {
                 course_id: Number(id)
             }
         });
-        if (!topic) {
+        if (topics.length==0) {
             throw new Error(`Resourse Not Found`);
         }
 
-        return topic;
+        return topics;
     };
 
 
@@ -54,7 +47,8 @@ class TopicService {
         }
     };
 
-    public async deleteTopic(id: number) {
+    public async deleteTopic(id: number) 
+    {
         const affectedRows = await Topic.destroy({
             where: {
                 topic_id : id
@@ -64,13 +58,12 @@ class TopicService {
             throw new Error('Resource Not Found');
         }
         return "Successfully Deleted";
-    } catch(error: Error) {
-        logger.error('An error occurred:', error);
-        throw new Error('Internal server error');
-    };
+    } 
+  
+    
 
     public async updateTopic(id: number, updates: Object) {
-        try {
+        
             const [affectedRows] = await Topic.update(updates, {
                 where: {
                     topic_id : id,
@@ -80,10 +73,7 @@ class TopicService {
                 throw new Error(`Resources Not Found`);
             }
             return "Successfully Updated";
-        } catch (error) {
-            logger.error('An error occurred:', error);
-            throw new Error('Internal server error');
-        };
+        
     };
 }
 
