@@ -24,6 +24,8 @@ Before you begin, make sure you have the following software installed on your sy
 ## Dependencies
 
 ### `npm install`
+### `npm install react-icons`
+### `npm install aos`
 
 ## Running the App
 

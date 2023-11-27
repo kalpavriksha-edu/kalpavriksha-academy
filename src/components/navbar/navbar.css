@@ -47,6 +47,8 @@
   transform: translate(5px);
 }
 
+
+
 @media screen and (max-width: 769px) {
   .header .navBar {
     position: absolute;
@@ -69,12 +71,16 @@
     width: 100%;
     margin: auto;
     padding: 0.5rem 0;
+
+    margin-top: 1rem;
   }
 
   .header .navBar .navLists .navItem {
     padding: 0.5rem 0;
+   
   }
 
+  
   .header .navBar .navLists .navItem .navLink {
     color: var(--textColor);
     font-size: 0.9rem;
@@ -86,7 +92,7 @@
   }
 
   .header .navBar .navLists .btn {
-    margin-top: 1rem;
+    margin-left: auto;
   }
 
   .header .navBar .navLists .btn a {
@@ -108,6 +114,11 @@
   .header .activeNavbar {
     top: 7rem;
   }
+  .header .toggleNavbar {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
 
   .header .toggleNavbar .icon {
     font-size: 25px;
@@ -120,6 +131,9 @@
 }
 
 @media screen and (min-width: 769px) {
+  .navBarSection {
+    width: 100%;
+  }
   .header .toggleNavbar,
   .header .closeNavbar {
     display: none;
@@ -136,8 +150,9 @@
   .header .navBar .navLists {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     flex-direction: row;
+    width: 100%;
   }
 
   .header .navBar .navLists .navItem {
@@ -154,11 +169,12 @@
   .header .navBar .navLists .navItem .navLink:hover {
     color: var(--PrimaryColor);
   }
-
   .header .navBar .navLists .btn {
-    margin-left: 10rem;
+    align-self:flex-end;
+    margin-left: auto; 
+    order: 10;
   }
-
+  
   .header .navBar .navLists .btn a {
     color: var(--whiteColor);
     font-weight: 500;
@@ -166,14 +182,24 @@
 }
 
 @media screen and (min-width: 960px) {
+  .navBarSection {
+    width: 100%;
+  }
   .header {
     .navBar .navLists .navItem {
       padding: 0 0.7rem;
     }
   }
+  .header .navBar .navLists .btn {
+    margin-left: auto; 
+    margin-right: 0;
+  }
 }
 
 @media screen and (min-width: 1240px) {
+  .navBarSection {
+  width: 100%;
+}
   .header .toggleNavbar,
   .header .closeNavbar {
     display: none;
@@ -185,9 +211,9 @@
 
   .header .navBar {
     margin-left: 5rem;
-  }
-
+  }  
   .header .navBar .navLists .btn {
-    margin-left: 32rem;
+    margin-left: auto; 
+    margin-right: 0;
   }
 }
