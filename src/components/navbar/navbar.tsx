@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./navbar.css";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { TbGridDots } from "react-icons/tb";
-import kp1 from "../../Assets/kp1.png";
+import kp_logo from "../../assets/kp_logo.png";
 
 interface NavbarProps {}
 
@@ -27,7 +27,7 @@ class Navbar extends Component<NavbarProps, NavbarState> {
     return (
       <div className="logoDiv">
         <a href="#" className="logo flex">
-          <img src={kp1} alt="KP" />
+          <img src={kp_logo} alt="KP" />
           <h1 className="icon">Kalpavriksha</h1>
         </a>
       </div>
@@ -62,9 +62,12 @@ class Navbar extends Component<NavbarProps, NavbarState> {
             Pricing
           </a>
         </li>
+          <li className="navItem">
         <button className="btn">
           <a href="#">Log-In</a>
         </button>
+      </li>
+        
       </ul>
     );
   }
